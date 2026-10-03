@@ -3,3 +3,8 @@
 /*.png
 /brotheric/
 .claude/
+# raw generated images (web-optimized copies live in site/assets)
+/jewels/
+/apparels/
+/looks/
+/graphic/

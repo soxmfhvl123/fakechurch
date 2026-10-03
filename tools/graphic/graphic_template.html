@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Graphics · FAKE CHURCH</title>
+<meta name="description" content="FAKE CHURCH brand graphics: logo, wordmark, halo symbol, stamp and icons as outlined vectors.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=19">
+<style>
+  .graphics { padding-bottom: 12vh; }
+  .g-top { padding: 160px var(--gutter) 56px; }
+  .g-nav {
+    position: sticky; top: 68px; z-index: 20; display: flex; gap: 4px 26px; flex-wrap: wrap;
+    padding: 14px var(--gutter); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    background: rgba(10,10,10,.86); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  }
+  .g-nav a { font-family: var(--f-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-dim); text-decoration: none; transition: color .3s; }
+  .g-nav a:hover { color: var(--ink); }
+
+  .g-sec { padding: 96px var(--gutter) 0; scroll-margin-top: 110px; }
+  .g-head { display: grid; grid-template-columns: 80px minmax(0, 320px) minmax(0, 520px); gap: 24px; align-items: baseline; margin-bottom: 40px; }
+  .g-head .kicker { margin: 0; }
+  .g-head h2 { margin: 0; font-size: 28px; font-weight: 600; letter-spacing: 0; }
+  .g-head p:last-child { margin: 0; color: var(--ink-2); font-size: 15px; line-height: 1.7; }
+
+  .g-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px; }
+  .icon-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px; }
+  .g-card { margin: 0; background: #111; display: flex; flex-direction: column; }
+  .g-card.wide { grid-column: 1 / -1; }
+  .g-stage { display: grid; place-items: center; aspect-ratio: 16 / 9; padding: 8%; }
+  .g-card.wide .g-stage { aspect-ratio: 21 / 8; padding: 6% 14%; }
+  .icon-grid .g-stage { aspect-ratio: 1; padding: 30%; }
+  #s03 .g-stage { padding: 14% 30%; }
+  .g-stage svg { width: 100%; height: 100%; display: block; }
+  .g-stage.dark { background: var(--bg-deep); color: var(--ink); }
+  .g-stage.light { background: #efede8; color: #0a0a0a; }
+  .g-stage.paper { background: #ebe4d2; }
+  .g-card figcaption { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: 16px 18px 18px; border-top: 1px solid var(--line); }
+  .g-card h3 { margin: 0; font-size: 14px; font-weight: 600; letter-spacing: 0; }
+  .g-card figcaption .mono { margin: 4px 0 0; font-size: 11px; color: var(--ink-dim); }
+  .g-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .icon-grid figcaption { flex-direction: column; gap: 12px; }
+  .sym-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px; }
+  .sym-grid .g-stage { aspect-ratio: 1; padding: 16%; }
+  .sym-grid .g-card.wide .g-stage { aspect-ratio: 5 / 1; padding: 3% 12%; }
+  .sym-grid figcaption { flex-direction: column; gap: 12px; }
+  .g-stage.dark { --g-bg: #0a0a0a; }
+  .g-stage.light { --g-bg: #efede8; }
+  .g-stage.paper { --g-bg: #ebe4d2; }
+  #s06[data-tone="black"] .g-stage, #s07[data-tone="black"] .g-stage { background: #efede8; color: #0a0a0a; --g-bg: #efede8; }
+  #s07[data-tone="red"] .g-stage { color: var(--stamp-red); }
+  #s07 .g-stage { padding: 12%; }
+  #s07 .g-card.wide .g-stage { aspect-ratio: 21 / 9; padding: 3% 30%; }
+  .sym-grid.orn .g-stage { padding: 14%; }
+  .g-stage.sheet { aspect-ratio: 4 / 5; padding: 0; }
+  #s06[data-tone="red"] .g-stage { color: var(--stamp-red); }
+  .tone { display: flex; gap: 6px; margin: -16px 0 20px; }
+  .tone button { background: none; border: 1px solid var(--line); color: var(--ink-dim); cursor: pointer; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; padding: 7px 12px; }
+  .tone button[aria-pressed="true"] { border-color: var(--ink); color: var(--ink); }
+  .g-stage.poster { aspect-ratio: 3 / 4; padding: 0; }
+  #s04 .g-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .g-actions button {
+    background: none; border: 1px solid var(--line); color: var(--ink-2); cursor: pointer;
+    font-size: 10px; letter-spacing: .1em; padding: 7px 10px; transition: border-color .3s, color .3s;
+  }
+  .g-actions button:hover { border-color: var(--ink); color: var(--ink); }
+
+  .swatches { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; }
+  .swatches li { background: #111; padding: 0 0 18px; display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; }
+  .swatches .sw { grid-column: 1 / -1; height: 140px; margin-bottom: 12px; box-shadow: inset 0 0 0 1px var(--line); }
+  .swatches b { padding-left: 18px; font-size: 14px; font-weight: 600; }
+  .swatches .mono { padding-right: 18px; font-size: 11px; color: var(--ink-2); text-align: right; }
+  .swatches .dim { grid-column: 1; padding-left: 18px; text-align: left; color: var(--ink-dim); }
+  .swatches em { grid-column: 2; grid-row: 3; padding-right: 18px; font-style: normal; font-size: 12px; color: var(--ink-dim); text-align: right; }
+  .swatches li.grad { grid-column: 1 / -1; }
+  .swatches li.grad .sw { height: 90px; }
+
+  .type-grid { border-top: 1px solid var(--line); }
+  .type-row { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 24px; align-items: center; padding: 28px 0; border-bottom: 1px solid var(--line); }
+  .type-row > div { display: flex; flex-direction: column; gap: 4px; }
+  .type-row b { font-size: 14px; font-weight: 600; }
+  .type-row .mono { font-size: 11px; color: var(--ink-dim); }
+  .t-spec { margin: 0; line-height: 1.1; overflow-wrap: anywhere; }
+  .t-spec.bl { font-size: clamp(44px, 6vw, 84px); }
+  .t-spec.stampf { font-family: "Black Ops One", var(--f-sans); font-size: clamp(40px, 5vw, 72px); color: var(--stamp-red); letter-spacing: .06em; }
+  .t-spec.sans { font-size: clamp(26px, 3.4vw, 44px); font-weight: 600; letter-spacing: 0; }
+  .t-spec.serif { font-family: var(--f-serif-en); font-size: clamp(22px, 2.8vw, 36px); }
+  .t-spec.mono { font-size: clamp(18px, 2vw, 26px); letter-spacing: .08em; }
+
+  @media (max-width: 900px) {
+    .g-head { grid-template-columns: 1fr; gap: 8px; }
+    .g-grid, #s04 .g-grid { grid-template-columns: 1fr; }
+    .icon-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .sym-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .g-card.wide .g-stage { aspect-ratio: 16 / 9; padding: 8%; }
+    .swatches { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .type-row { grid-template-columns: 1fr; gap: 10px; }
+    .g-nav { top: 60px; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .g-nav a { flex: 0 0 auto; }
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <a class="mark" href="index.html" style="text-decoration:none">
+    <svg class="mark-halo" viewBox="-50 -50 100 100" aria-hidden="true"><circle r="40" fill="none" stroke="#d8d8d8" stroke-width="6" pathLength="360" stroke-dasharray="34 11"/></svg>
+    <span class="mark-word">Fake Church</span>
+  </a>
+  <nav class="top-nav"><a href="shop.html">Shop</a><a href="lookbook.html">Lookbook</a></nav>
+</header>
+
+<main class="graphics">
+  <section class="g-top">
+    <p class="mono kicker">Brand Graphics</p>
+    <h1 class="bl xl">Graphics</h1>
+    <p class="sub">The marks of FAKE CHURCH. Every graphic is an outlined, self-contained vector: no fonts or external files required.</p>
+  </section>
+  <nav class="g-nav">{{NAV}}</nav>
+{{BODY}}
+</main>
+
+<footer class="site-foot">
+  <p class="mono">© 2026 FAKE CHURCH. All rights reserved by the model.</p>
+  <p class="mono disclaimer">FAKE CHURCH is a conceptual art project. It is not a registered religious entity of worship, and does not solicit real donations.</p>
+</footer>
+<div class="grain" aria-hidden="true"></div>
+
+<script>
+(() => {
+  const serialize = id => {
+    const el = document.querySelector(`#${id} .g-stage svg`);
+    const clone = el.cloneNode(true);
+    // icons use currentColor: bake in the colour shown on the page
+    clone.setAttribute("color", getComputedStyle(el).color);
+    // emblems fill their front shapes with the ground colour: bake that in too
+    const ground = getComputedStyle(el.closest(".g-stage")).backgroundColor;
+    const text = new XMLSerializer().serializeToString(clone).replace(/var\(--g-bg, #0a0a0a\)/g, ground);
+    return '<?xml version="1.0" encoding="UTF-8"?>\n' + text;
+  };
+  const save = (blob, name) => {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  };
+  document.addEventListener("click", e => {
+    const t = e.target.closest("[data-tone]");
+    if (t) {
+      t.closest(".g-sec").dataset.tone = t.dataset.tone;
+      t.parentElement.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", x === t));
+      return;
+    }
+    const b = e.target.closest("[data-dl], [data-png]"); if (!b) return;
+    const id = b.dataset.dl || b.dataset.png;
+    const text = serialize(id);
+    if (b.dataset.dl) return save(new Blob([text], { type: "image/svg+xml" }), `fake-church-${id}.svg`);
+    // PNG: render the vector at 3000px on the long side, transparent background
+    const vb = document.querySelector(`#${id} .g-stage svg`).viewBox.baseVal;
+    const k = 3000 / Math.max(vb.width, vb.height);
+    const img = new Image();
+    img.onload = () => {
+      const c = document.createElement("canvas");
+      c.width = Math.round(vb.width * k); c.height = Math.round(vb.height * k);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      c.toBlob(blob => save(blob, `fake-church-${id}.png`), "image/png");
+    };
+    img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(text);
+  });
+})();
+</script>
+</body>
+</html>

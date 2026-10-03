@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Shop · FAKE CHURCH</title>
+<meta name="description" content="FAKE CHURCH shop: apparel and devotional objects in 925 sterling silver.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=19">
+<link rel="stylesheet" href="shop.css?v=7">
+</head>
+<body class="shop-page">
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="chrome" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d8d8d8"/>
+      <stop offset=".5" stop-color="#7c7c7c"/>
+      <stop offset="1" stop-color="#d8d8d8"/>
+    </linearGradient>
+    <symbol id="halo" viewBox="0 0 100 100">
+      <g fill="none" stroke="url(#chrome)" stroke-width="6" stroke-linecap="butt">
+        <circle cx="50" cy="50" r="40" pathLength="360" stroke-dasharray="34 11"/>
+      </g>
+      <circle cx="50" cy="50" r="30" fill="none" stroke="url(#chrome)" stroke-width=".6" opacity=".6"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="masthead">
+  <button class="mark" id="menuToggle" aria-expanded="false" aria-controls="menu">
+    <svg class="mark-halo" aria-hidden="true"><use href="#halo"/></svg>
+    <span class="mark-word">Fake Church</span>
+  </button>
+  <nav class="top-nav"><a href="shop.html" aria-current="page">Shop</a><a href="lookbook.html">Lookbook</a></nav>
+</header>
+
+<nav class="menu" id="menu" aria-hidden="true">
+  <div class="menu-doors"><span></span><span></span></div>
+  <div class="menu-inner">
+    <p class="mono menu-kicker">Index</p>
+    <ol class="menu-list">
+      <li><a href="index.html"><span class="mono">00</span><span class="bl">Home</span></a></li>
+      <li><a href="index.html#altar"><span class="mono">01</span><span class="bl">The Altar</span></a></li>
+      <li><a href="index.html#doctrine"><span class="mono">02</span><span class="bl">Doctrine</span></a></li>
+      <li><a href="index.html#scripture"><span class="mono">03</span><span class="bl">Scripture</span></a></li>
+      <li><a href="index.html#join"><span class="mono">04</span><span class="bl">Join</span></a></li>
+      <li><a href="index.html#charter"><span class="mono">05</span><span class="bl">Charter</span></a></li>
+      <li><a href="index.html#contact"><span class="mono">06</span><span class="bl">Contact</span></a></li>
+      <li><a href="shop.html" class="current"><span class="mono">07</span><span class="bl">Shop</span></a></li>
+      <li><a href="lookbook.html"><span class="mono">08</span><span class="bl">Lookbook</span></a></li>
+    </ol>
+    <p class="mono menu-foot">Esc to close</p>
+  </div>
+</nav>
+
+<main class="shop">
+  <h1 class="visually-hidden">Shop</h1>
+
+  <div class="shop-bar" id="shop">
+    <nav class="filters" id="filters" aria-label="Categories"></nav>
+    <p class="mono shop-count" id="shopCount"></p>
+  </div>
+
+  <section class="grid" id="grid" aria-live="polite"></section>
+</main>
+
+<footer class="site-foot">
+  <p class="mono">© 2026 FAKE CHURCH. All rights reserved by the model.</p>
+  <p class="mono disclaimer">FAKE CHURCH is a conceptual art project. It is not a registered religious entity of worship, and does not solicit real donations.</p>
+</footer>
+
+<!-- product detail -->
+<div class="sheet" id="sheet" hidden>
+  <div class="sheet-backdrop" data-close></div>
+  <article class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="sheetName">
+    <button class="sheet-close mono" data-close aria-label="Close">Close ✕</button>
+    <div class="sheet-gallery">
+      <div class="sheet-main"><img id="sheetImg" alt=""></div>
+      <div class="sheet-thumbs" id="sheetThumbs"></div>
+    </div>
+    <div class="sheet-info">
+      <p class="mono sheet-cat" id="sheetCat"></p>
+      <h2 id="sheetName"></h2>
+      <p class="sheet-price mono" id="sheetPrice"></p>
+      <p class="sheet-desc" id="sheetDesc"></p>
+      <div class="sheet-size" id="sheetSize" hidden>
+        <p class="field-label" id="sizeLabel">Size</p>
+        <div class="sizes" id="sizes"></div>
+      </div>
+      <dl class="sheet-spec" id="sheetSpec"></dl>
+      <button class="btn-red sheet-buy" disabled><span>Coming Soon</span><span class="mono">Not yet available</span></button>
+    </div>
+  </article>
+</div>
+
+<div class="cursor-halo" aria-hidden="true"><svg><use href="#halo"/></svg></div>
+<div class="grain" aria-hidden="true"></div>
+
+<script src="shop-data.js?v=6"></script>
+<script src="shop.js?v=4"></script>
+</body>
+</html>

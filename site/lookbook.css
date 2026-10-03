@@ -1,0 +1,75 @@
+/* ---------- lookbook ---------- */
+
+.lb-grid {
+  display: grid; grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(12px, 2vw, 32px); row-gap: clamp(48px, 9vw, 160px);
+  padding: 120px var(--gutter) 20vh; align-items: start;
+}
+.lb-card { margin: 0; grid-column: var(--col); margin-top: calc(var(--drop) * 22vw); }
+/* full-bleed plates break out of the gutters; the first sits under the masthead, the last on the footer */
+.lb-bleed { grid-column: 1 / -1; margin: 0 calc(-1 * var(--gutter)); }
+.lb-bleed .lb-open img { aspect-ratio: var(--ar); object-fit: cover; }
+.lb-bleed.first { margin-top: -120px; }
+.lb-bleed.last { margin-bottom: -20vh; }
+.lb-bleed .lb-no { left: var(--gutter); bottom: 20px; }
+.lb-divider {
+  grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 16px;
+  padding-top: 18px; border-top: 1px solid var(--line); margin-bottom: calc(-1 * clamp(24px, 6vw, 110px));
+}
+.lb-divider p { margin: 0; font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink-dim); }
+.lb-divider p:first-child { color: var(--ink); }
+.lb-divider ~ .lb-divider { margin-top: clamp(40px, 6vw, 120px); }
+.lb-open { all: unset; position: relative; display: block; width: 100%; cursor: zoom-in; overflow: hidden; background: #000; }
+.lb-open:focus-visible { outline: 1px solid var(--ink); outline-offset: 4px; }
+.lb-open img {
+  display: block; width: 100%; aspect-ratio: var(--ar); object-fit: cover; object-position: var(--pos);
+  filter: brightness(.9); transition: transform 1.8s var(--ease), filter 1s var(--ease);
+}
+.lb-card:hover .lb-open img { transform: scale(1.025); filter: brightness(1); }
+.lb-no {
+  position: absolute; left: 14px; bottom: 12px; font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--ink); opacity: 0; transform: translateY(6px); transition: opacity .6s var(--ease), transform .6s var(--ease);
+}
+.lb-card:hover .lb-no, .lb-open:focus-visible .lb-no { opacity: .9; transform: none; }
+
+@media (max-width: 760px) {
+  .lb-grid { grid-template-columns: 1fr; row-gap: 56px; }
+  .lb-card { grid-column: 1; margin-top: 0; }
+  .lb-divider { margin-bottom: -24px; }
+  .lb-bleed { width: auto !important; justify-self: stretch !important; }
+  .lb-card:nth-child(3n + 2) { width: 78%; justify-self: end; }
+  .lb-card:nth-child(3n) { width: 86%; }
+  .lb-card.wide .lb-open img { aspect-ratio: 4 / 3; }
+  .lb-no { opacity: .8; transform: none; }
+}
+
+.lb-items { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.lb-items li { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 13px; }
+.lb-items a { text-decoration: none; color: var(--ink-2); transition: color .3s; }
+.lb-items a:hover { color: var(--ink); }
+.lb-items a::after { content: " +"; color: var(--stamp-red); }
+.lb-items .mono { font-size: 11px; color: var(--ink-dim); }
+
+/* ---------- full-screen look ---------- */
+.lb-view {
+  position: fixed; inset: 0; z-index: 70; background: rgba(5,5,5,.97);
+  display: grid; grid-template-columns: minmax(0, 1fr) 340px; align-items: center;
+  opacity: 0; transition: opacity .4s var(--ease);
+}
+.lb-view[hidden] { display: none; }
+.lb-view.open { opacity: 1; }
+.lb-view-img { margin: 0; height: 100svh; display: grid; place-items: center; padding: 4vh 0 4vh 4vw; }
+.lb-view-img img { max-width: 100%; max-height: 92svh; object-fit: contain; display: block; }
+.lb-view-info { padding: 0 var(--gutter) 0 40px; }
+.lb-view-info h2 { margin: 0 0 28px; font-size: clamp(44px, 4vw, 64px); font-weight: 400; line-height: 1; }
+.lb-view-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-dim); }
+.lb-view-nav button { background: none; border: 1px solid var(--line); color: var(--ink-2); padding: 10px 14px; cursor: pointer; font: inherit; letter-spacing: inherit; text-transform: inherit; }
+.lb-view-nav button:hover { border-color: var(--ink); color: var(--ink); }
+.lb-view-close { position: absolute; top: 22px; right: var(--gutter); background: none; border: 0; color: var(--ink-2); cursor: pointer; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+.lb-view-close:hover { color: var(--ink); }
+@media (max-width: 860px) {
+  .lb-view { grid-template-columns: 1fr; align-content: start; overflow-y: auto; }
+  .lb-view-img { height: auto; padding: 64px 0 0; }
+  .lb-view-img img { max-height: 70svh; }
+  .lb-view-info { padding: 24px var(--gutter) 40px; }
+}

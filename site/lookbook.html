@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lookbook · FAKE CHURCH</title>
+<meta name="description" content="FAKE CHURCH lookbook: apparel and silver, worn in the dark.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=19">
+<link rel="stylesheet" href="lookbook.css?v=6">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="chrome" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d8d8d8"/>
+      <stop offset=".5" stop-color="#7c7c7c"/>
+      <stop offset="1" stop-color="#d8d8d8"/>
+    </linearGradient>
+    <symbol id="halo" viewBox="0 0 100 100">
+      <g fill="none" stroke="url(#chrome)" stroke-width="6" stroke-linecap="butt">
+        <circle cx="50" cy="50" r="40" pathLength="360" stroke-dasharray="34 11"/>
+      </g>
+      <circle cx="50" cy="50" r="30" fill="none" stroke="url(#chrome)" stroke-width=".6" opacity=".6"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="masthead">
+  <button class="mark" id="menuToggle" aria-expanded="false" aria-controls="menu">
+    <svg class="mark-halo" aria-hidden="true"><use href="#halo"/></svg>
+    <span class="mark-word">Fake Church</span>
+  </button>
+  <nav class="top-nav"><a href="shop.html">Shop</a><a href="lookbook.html" aria-current="page">Lookbook</a></nav>
+</header>
+
+<nav class="menu" id="menu" aria-hidden="true">
+  <div class="menu-doors"><span></span><span></span></div>
+  <div class="menu-inner">
+    <p class="mono menu-kicker">Index</p>
+    <ol class="menu-list">
+      <li><a href="index.html"><span class="mono">00</span><span class="bl">Home</span></a></li>
+      <li><a href="index.html#altar"><span class="mono">01</span><span class="bl">The Altar</span></a></li>
+      <li><a href="index.html#doctrine"><span class="mono">02</span><span class="bl">Doctrine</span></a></li>
+      <li><a href="index.html#scripture"><span class="mono">03</span><span class="bl">Scripture</span></a></li>
+      <li><a href="index.html#join"><span class="mono">04</span><span class="bl">Join</span></a></li>
+      <li><a href="index.html#charter"><span class="mono">05</span><span class="bl">Charter</span></a></li>
+      <li><a href="index.html#contact"><span class="mono">06</span><span class="bl">Contact</span></a></li>
+      <li><a href="shop.html"><span class="mono">07</span><span class="bl">Shop</span></a></li>
+      <li><a href="lookbook.html" class="current"><span class="mono">08</span><span class="bl">Lookbook</span></a></li>
+    </ol>
+    <p class="mono menu-foot">Esc to close</p>
+  </div>
+</nav>
+
+<main class="lookbook">
+  <h1 class="visually-hidden">Lookbook</h1>
+
+  <section class="lb-grid" id="lookGrid"></section>
+</main>
+
+<footer class="site-foot">
+  <p class="mono">© 2026 FAKE CHURCH. All rights reserved by the model.</p>
+  <p class="mono disclaimer">FAKE CHURCH is a conceptual art project. It is not a registered religious entity of worship, and does not solicit real donations.</p>
+</footer>
+
+<!-- full-screen look -->
+<div class="lb-view" id="lookView" hidden role="dialog" aria-modal="true" aria-labelledby="viewTitle">
+  <figure class="lb-view-img"><img id="viewImg" alt=""></figure>
+  <aside class="lb-view-info">
+    <p class="mono kicker" id="viewKicker"></p>
+    <h2 class="bl" id="viewTitle"></h2>
+    <ul class="lb-items" id="viewItems"></ul>
+    <div class="lb-view-nav mono">
+      <button id="viewPrev" aria-label="Previous look">← Prev</button>
+      <span id="viewCount"></span>
+      <button id="viewNext" aria-label="Next look">Next →</button>
+    </div>
+  </aside>
+  <button class="lb-view-close mono" id="viewClose" aria-label="Close">Close ✕</button>
+</div>
+
+<div class="cursor-halo" aria-hidden="true"><svg><use href="#halo"/></svg></div>
+<div class="grain" aria-hidden="true"></div>
+
+<script src="shop-data.js?v=6"></script>
+<script src="looks-data.js?v=5"></script>
+<script src="lookbook.js?v=4"></script>
+</body>
+</html>
