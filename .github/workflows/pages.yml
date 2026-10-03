@@ -1,0 +1,27 @@
+# Publish site/ to the gh-pages branch; GitHub Pages serves that branch.
+name: Publish site
+
+on:
+  push:
+    branches: [main]
+    paths: ["site/**", ".github/workflows/pages.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Split site/ into its own history and push it to gh-pages
+        run: |
+          git subtree split --prefix site -b site-only
+          git push --force origin site-only:gh-pages
