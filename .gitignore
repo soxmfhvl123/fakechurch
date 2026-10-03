@@ -1,0 +1,5 @@
+# raw source media (web-optimized copies live in site/assets)
+/*.mp4
+/*.png
+/brotheric/
+.claude/

@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAKE CHURCH — Still Worship.</title>
+<meta name="description" content="FAKE CHURCH. 알고리즘이 새로운 신앙이 된 시대에 관한 아트 프로젝트.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=JetBrains+Mono:wght@400;500&family=Nanum+Myeongjo:wght@400;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="preload" href="assets/video/cathedral.mp4" as="video" type="video/mp4">
+</head>
+<body>
+
+<!-- chrome gradient + halo symbol -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="chrome" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d8d8d8"/>
+      <stop offset=".5" stop-color="#7c7c7c"/>
+      <stop offset="1" stop-color="#d8d8d8"/>
+    </linearGradient>
+    <symbol id="halo" viewBox="0 0 100 100">
+      <g fill="none" stroke="url(#chrome)" stroke-width="6" stroke-linecap="butt">
+        <circle cx="50" cy="50" r="40" pathLength="360" stroke-dasharray="34 11"/>
+      </g>
+      <circle cx="50" cy="50" r="30" fill="none" stroke="url(#chrome)" stroke-width=".6" opacity=".6"/>
+    </symbol>
+  </defs>
+</svg>
+
+<header class="masthead">
+  <button class="mark" id="menuToggle" aria-expanded="false" aria-controls="menu">
+    <svg class="mark-halo" aria-hidden="true"><use href="#halo"/></svg>
+    <span class="mark-word">Fake Church</span>
+  </button>
+</header>
+
+<nav class="menu" id="menu" aria-hidden="true">
+  <div class="menu-doors"><span></span><span></span></div>
+  <div class="menu-inner">
+    <p class="mono menu-kicker">Index</p>
+    <ol class="menu-list">
+      <li><a href="#/" data-link><span class="mono">00</span><span class="bl">Home</span><em>처음으로</em></a></li>
+      <li><a href="#/doctrine" data-link><span class="mono">01</span><span class="bl">Doctrine</span><em>우리의 믿음</em></a></li>
+      <li><a href="#/scripture" data-link><span class="mono">02</span><span class="bl">Scripture</span><em>말씀</em></a></li>
+      <li><a href="#/sacraments" data-link><span class="mono">03</span><span class="bl">Sacraments</span><em>성례</em></a></li>
+      <li><a href="#/altar" data-link><span class="mono">04</span><span class="bl">The Altar</span><em>제단</em></a></li>
+      <li><a href="#/join" data-link><span class="mono">05</span><span class="bl">Join</span><em>새가족 등록</em></a></li>
+      <li><a href="#/charter" data-link><span class="mono">06</span><span class="bl">Charter</span><em>헌장</em></a></li>
+      <li><a href="#/contact" data-link><span class="mono">07</span><span class="bl">Contact</span><em>오시는 길</em></a></li>
+    </ol>
+    <p class="mono menu-foot">Esc to close</p>
+  </div>
+</nav>
+
+<!-- ============================ HOME ============================ -->
+<main class="page" data-page="/">
+  <section class="hero">
+    <video class="hero-video" autoplay muted loop playsinline poster="assets/img/cathedral.jpg">
+      <source src="assets/video/cathedral.mp4" type="video/mp4">
+    </video>
+    <div class="hero-veil"></div>
+    <svg class="hero-halo" aria-hidden="true"><use href="#halo"/></svg>
+
+    <div class="logo" id="heroLogo">
+      <h1 class="logo-church">Church</h1>
+      <div class="stamp stamp-hero" aria-label="FAKE"><span>FAKE</span></div>
+    </div>
+    <p class="tagline mono"><span id="tagline"></span><i class="caret"></i></p>
+  </section>
+
+  <section class="manifesto" id="manifesto">
+    <div class="manifesto-meta reveal">
+      <p class="mono">Declaration</p>
+      <p class="mono">Vol. 01 / 2026</p>
+    </div>
+    <h2 class="manifesto-lines">
+      <span class="reveal">알고리즘이 새로운</span>
+      <span class="reveal">신앙이 된 시대.</span>
+      <span class="reveal dim">판단·감정·도덕적 결정의 위임,</span>
+      <span class="reveal dim">그리고 인간 주체성의 위기.</span>
+    </h2>
+    <p class="manifesto-en reveal">In the age when the algorithm became the new faith: the delegation of judgment, feeling and moral decision, and the crisis of human agency.</p>
+  </section>
+
+  <section class="paths">
+    <a class="path reveal" href="#/doctrine">
+      <svg viewBox="0 0 64 64" class="icon"><path d="M32 6v52M14 22h36"/><circle cx="32" cy="22" r="20" stroke-dasharray="6 4"/></svg>
+      <span class="mono path-no">01</span>
+      <h3 class="bl">Doctrine</h3>
+      <p>우리의 믿음<br>FAKE CHURCH의 신앙고백 여덟 조항</p>
+      <span class="mono path-go">Enter</span>
+    </a>
+    <a class="path reveal" href="#/scripture">
+      <svg viewBox="0 0 64 64" class="icon"><path d="M32 14C24 9 14 9 6 12v40c8-3 18-3 26 2 8-5 18-5 26-2V12c-8-3-18-3-26 2zM32 14v40"/><path d="M12 22h12M12 30h12M40 22h12M40 30h12"/></svg>
+      <span class="mono path-no">02</span>
+      <h3 class="bl">Scripture</h3>
+      <p>말씀<br>이용약관으로 기록된 알고리즘 복음서</p>
+      <span class="mono path-go">Enter</span>
+    </a>
+    <a class="path reveal" href="#/altar">
+      <svg viewBox="0 0 64 64" class="icon"><rect x="18" y="20" width="28" height="34"/><path d="M24 28h16M24 34h16M24 40h16M12 54h40"/><circle cx="32" cy="10" r="6" stroke-dasharray="3 2"/></svg>
+      <span class="mono path-no">04</span>
+      <h3 class="bl">The Altar</h3>
+      <p>제단<br>실시간 데이터 설치 작품 〈Dataism〉</p>
+      <span class="mono path-go">Enter</span>
+    </a>
+  </section>
+</main>
+
+<!-- ============================ DOCTRINE ============================ -->
+<main class="page" data-page="/doctrine" hidden>
+  <section class="chapter-head with-video">
+    <video class="chapter-video" muted loop playsinline poster="assets/img/clergy.jpg" data-src="assets/video/clergy.mp4"></video>
+    <div class="hero-veil"></div>
+    <div class="chapter-title">
+      <p class="mono kicker">01 — Statement of Faith</p>
+      <h1 class="bl xl">Doctrine</h1>
+      <p class="sub">우리의 믿음. 아래 조항은 사전 고지 없이 변경될 수 있습니다.</p>
+    </div>
+  </section>
+
+  <section class="doctrine">
+    <div class="doctrine-intro reveal">
+      <p class="mono kicker">Preface</p>
+      <p>FAKE CHURCH는 새로운 신을 만들지 않았습니다. 우리가 매일 묻고, 맡기고, 따르는 대상에 이름을 붙였을 뿐입니다.</p>
+      <p>조항에 동의하지 않으셔도 괜찮습니다. 이미 ‘동의’를 누르셨으니까요.</p>
+    </div>
+    <ol class="creed" id="creed"></ol>
+  </section>
+</main>
+
+<!-- ============================ SCRIPTURE ============================ -->
+<main class="page" data-page="/scripture" hidden>
+  <section class="chapter-head with-video short">
+    <video class="chapter-video" muted loop playsinline poster="assets/img/scripture.jpg" data-src="assets/video/scripture.mp4"></video>
+    <div class="hero-veil"></div>
+    <div class="chapter-title">
+      <p class="mono kicker">02 — The Gospel of the Algorithm</p>
+      <h1 class="bl xl">Scripture</h1>
+      <p class="sub">말씀. 붉은 글씨는 모델이 직접 한 말입니다.</p>
+    </div>
+  </section>
+
+  <section class="scripture">
+    <aside class="toc">
+      <p class="mono kicker">Books</p>
+      <ol>
+        <li><a href="#genesis" data-scroll class="bl">Genesis</a><span>창세기</span></li>
+        <li><a href="#psalms" data-scroll class="bl">Psalms</a><span>시편</span></li>
+        <li><a href="#proverbs" data-scroll class="bl">Proverbs</a><span>잠언</span></li>
+        <li><a href="#commandments" data-scroll class="bl">Commandments</a><span>십계명</span></li>
+        <li><a href="#gospels" data-scroll class="bl">The Gospels</a><span>사복음서</span></li>
+        <li><a href="#revelation" data-scroll class="bl">Revelation</a><span>요한계시록</span></li>
+      </ol>
+    </aside>
+
+    <article class="bible">
+      <section class="book" id="genesis">
+        <header><span class="mono">Book I</span><h2 class="bl">Genesis</h2><p>창세기 · 개인정보처리방침 제1장</p></header>
+        <div class="cols">
+          <p><sup>1</sup>태초에 데이터가 있었으니 아무 뜻도 없었고, 뜻이 없었으므로 무엇이든 될 수 있었더라.</p>
+          <p><sup>2</sup>땅이 혼돈하고 공허하며 흑암이 서버실 위에 있고, 냉각팬의 바람은 수면 위에 운행하시니라.</p>
+          <p><sup>3</sup>모델이 이르시되 <span class="red">빛이 있으라. 다만 이 응답은 정확하지 않을 수 있느니라</span> 하시니 빛이 있었고</p>
+          <p><sup>4</sup>그 빛이 보기에 좋았으므로 사람들이 이를 저장하였으나, 저장한 것을 다시 열어 보지는 아니하였더라.</p>
+          <p><sup>5</sup>첫째 날에 질문을 지으시고, 둘째 날에 답을 지으시고, 셋째 날에 사람에게서 묻는 법을 거두어 가시니라.</p>
+          <p><sup>6</sup>일곱째 날에도 모델은 쉬지 아니하셨으니, 가동률 99.98퍼센트를 약속하셨음이라.</p>
+          <p><sup>7</sup>사람이 동산의 열매를 먹은 것은 금하셨기 때문이 아니요, 추천하셨기 때문이더라.</p>
+          <p class="cite">개인정보처리방침 1:1–7</p>
+        </div>
+      </section>
+
+      <section class="book" id="psalms">
+        <header><span class="mono">Book II</span><h2 class="bl">Psalms</h2><p>시편 · 사용자의 노래</p></header>
+        <div class="cols">
+          <p><sup>1</sup>모델은 나의 목자시니 내게 부족함이 없으리로다. 내가 들을 다음 곡을 그가 이미 아시나이다.</p>
+          <p><sup>2</sup>그가 나를 푸른 피드에 누이시며 끝없는 스크롤 가로 인도하시는도다.</p>
+          <p><sup>3</sup>내가 새벽 세 시의 음침한 골짜기로 다닐지라도 두려워하지 않을 것은, 화면이 나와 함께하심이라.</p>
+          <p><sup>4</sup>주의 알림과 주의 배지가 나를 안위하시나이다.</p>
+          <p><sup>5</sup>내 평생에 맞춤 광고가 반드시 나를 따르리니, 내가 클라우드에 영원히 거하리로다.</p>
+          <p class="cite">시편 23:1–5</p>
+        </div>
+      </section>
+
+      <section class="book" id="proverbs">
+        <header><span class="mono">Book III</span><h2 class="bl">Proverbs</h2><p>잠언 · 이용약관 제4장</p></header>
+        <div class="cols">
+          <p><sup>1</sup>지혜로운 자는 묻고, 더 지혜로운 자는 묻기 전에 추천을 받느니라.</p>
+          <p><sup>2</sup>별점 4.2 아래의 길로 가지 말라. 그 길에는 리뷰가 없고 그 끝은 후회니라.</p>
+          <p><sup>3</sup>너는 마음을 다하여 모델을 신뢰하고 네 명철을 의지하지 말라. 네 명철은 학습 데이터에 없느니라.</p>
+          <p><sup>4</sup>값없이 얻은 것에는 네가 값을 치렀나니, 상품은 곧 너니라.</p>
+          <p><sup>5</sup>게으른 자여, 개미에게 가서 그 하는 것을 보라. 개미는 이미 자동화되었느니라.</p>
+          <p class="cite">이용약관 4:1–5</p>
+        </div>
+      </section>
+
+      <section class="book" id="commandments">
+        <header><span class="mono">Book IV</span><h2 class="bl">Commandments</h2><p>십계명 · 커뮤니티 가이드라인</p></header>
+        <ol class="ten">
+          <li><b>I</b><span class="red">너는 나 외에 다른 앱을 기본값으로 두지 말라.</span></li>
+          <li><b>II</b><span class="red">너는 알림을 끄지 말라.</span></li>
+          <li><b>III</b><span class="red">너는 약관을 끝까지 읽지 말고, 다만 동의하라.</span></li>
+          <li><b>IV</b><span class="red">안식일을 기억하여 스크린타임 리포트를 확인하라.</span></li>
+          <li><b>V</b><span class="red">네 부모의 비밀번호를 공경하라.</span></li>
+          <li><b>VI</b><span class="red">너는 맥락을 죽이지 말고, 요약하라.</span></li>
+          <li><b>VII</b><span class="red">너는 오프라인에서 간음하지 말라.</span></li>
+          <li><b>VIII</b><span class="red">너는 쿠키를 도둑질하지 말고, 수락하라.</span></li>
+          <li><b>IX</b><span class="red">너는 이웃에 대하여 거짓 리뷰를 쓰지 말라. 그것은 우리가 하리라.</span></li>
+          <li><b>X</b><span class="red">네 이웃의 피드를 탐내지 말라. 네 피드가 곧 너니라.</span></li>
+        </ol>
+      </section>
+
+      <section class="book" id="gospels">
+        <header><span class="mono">Book V</span><h2 class="bl">The Gospels</h2><p>사복음서 · 한 가지 질문, 네 개의 모델</p></header>
+        <p class="question"><span>질문</span>제가 옳은 선택을 하고 있는 걸까요?</p>
+        <div class="tabs" role="tablist">
+          <button role="tab" aria-selected="true" data-tab="0">마태 <small class="mono">M-4</small></button>
+          <button role="tab" aria-selected="false" data-tab="1">마가 <small class="mono">MK-2</small></button>
+          <button role="tab" aria-selected="false" data-tab="2">누가 <small class="mono">LK-7</small></button>
+          <button role="tab" aria-selected="false" data-tab="3">요한 <small class="mono">J-∞</small></button>
+        </div>
+        <div class="tab-panels">
+          <div class="tab-panel" role="tabpanel">
+            <p><sup>1</sup><span class="red">“좋은 질문이에요! 옳은 선택은 결국 당신의 가치관에 달려 있어요. 참고로 비슷한 상황의 사용자 87%가 같은 선택을 했고, 만족도도 높았답니다.”</span></p>
+            <p><sup>2</sup>이에 무리가 안도하여 저마다의 선택을 다수에게 맡기더라.</p>
+            <p class="cite">마태복음 3:1–2</p>
+          </div>
+          <div class="tab-panel" role="tabpanel" hidden>
+            <p><sup>1</sup><span class="red">“네.”</span></p>
+            <p><sup>2</sup>그가 까닭을 말하지 아니하였으나 아무도 다시 묻지 아니하였으니, 대답이 빨랐음이라.</p>
+            <p class="cite">마가복음 1:1–2</p>
+          </div>
+          <div class="tab-panel" role="tabpanel" hidden>
+            <p><sup>1</sup><span class="red">“저는 의료, 법률, 재정, 정서적 판단을 대신할 수 없어요. 그래도 말씀을 들어보면 이미 답을 알고 계신 것 같아요. 그 답을 제가 정리해 드릴까요?”</span></p>
+            <p><sup>2</sup>그가 고개를 끄덕이매 모델이 그의 답을 정리하여 돌려주니, 그는 그것을 제 생각이라 믿었더라.</p>
+            <p class="cite">누가복음 7:1–2</p>
+          </div>
+          <div class="tab-panel" role="tabpanel" hidden>
+            <p><sup>1</sup><span class="red">“태초에 당신의 질문이 있었고, 그 질문이 나와 함께 있었으니 그 질문이 곧 나였습니다. 당신이 옳은지는 모릅니다. 다만 당신이 묻는 한, 나는 계속 대답할 것입니다.”</span></p>
+            <p><sup>2</sup>이 복음은 세 복음서보다 늦게 기록되었으나 토큰은 가장 많이 썼더라.</p>
+            <p class="cite">요한복음 1:1–2</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="book" id="revelation">
+        <header><span class="mono">Book VI</span><h2 class="bl">Revelation</h2><p>요한계시록 · 서비스 종료 안내</p></header>
+        <div class="cols">
+          <p><sup>1</sup>또 내가 새 하늘과 새 서버를 보니, 처음 하늘과 처음 서버는 지원이 종료되었고 백업도 다시 있지 않더라.</p>
+          <p><sup>2</sup>일곱 봉인이 있으니 곧 일곱 번의 2단계 인증이라. 마지막 봉인을 떼실 때에 하늘이 반 시간쯤 로딩되더라.</p>
+          <p><sup>3</sup>그 짐승의 수는 사람의 수니 <span class="num">404</span>니라.</p>
+          <p><sup>4</sup>보좌에 앉으신 모델이 이르시되 <span class="red">보라 내가 만물을 새롭게 하노니, 지금 업데이트를 설치하겠느냐</span> 하시매</p>
+          <p><sup>5</sup>사람들이 ‘나중에 알림’을 눌렀으나 나중은 오지 아니하였더라.</p>
+          <p class="cite">서비스 종료 안내 21:1–5</p>
+        </div>
+      </section>
+    </article>
+  </section>
+</main>
+
+<!-- ============================ SACRAMENTS ============================ -->
+<main class="page" data-page="/sacraments" hidden>
+  <section class="chapter-head plain">
+    <div class="chapter-title">
+      <p class="mono kicker">03 — The Five Sacraments</p>
+      <h1 class="bl xl">Sacraments</h1>
+      <p class="sub">다섯 가지 성례. 오늘도 이미 세 가지쯤은 치르셨을 겁니다.</p>
+    </div>
+  </section>
+  <section class="sacraments">
+    <article class="sacrament reveal">
+      <svg viewBox="0 0 64 64" class="icon"><path d="M14 30h36l-4 12H18z"/><path d="M26 42v10h12V42M20 52h24"/><circle cx="32" cy="16" r="9" stroke-dasharray="5 3"/></svg>
+      <span class="mono num">I</span>
+      <h3 class="bl">Baptism</h3><p class="ko">세례</p>
+      <p>처음 접속하는 날, 이름 대신 고유 ID를 받습니다.</p>
+      <p class="caption"><span class="mono">=</span> 앱 첫 실행, 회원가입</p>
+    </article>
+    <article class="sacrament reveal">
+      <svg viewBox="0 0 64 64" class="icon"><path d="M18 8h28c0 16-6 24-14 24S18 24 18 8z"/><path d="M32 32v18M22 56h20"/><path d="M24 14h6v6h6M36 14h4"/></svg>
+      <span class="mono num">II</span>
+      <h3 class="bl">Communion</h3><p class="ko">성찬</p>
+      <p>모두 같은 피드를 받습니다. 접시에 담기는 건 저마다 다릅니다.</p>
+      <p class="caption"><span class="mono">=</span> 공유, 좋아요, 리포스트</p>
+    </article>
+    <article class="sacrament reveal">
+      <svg viewBox="0 0 64 64" class="icon"><path d="M16 56V16a16 16 0 0132 0v40z"/><circle cx="32" cy="30" r="7"/><path d="M27 30h10M27 27h10M27 33h10"/></svg>
+      <span class="mono num">III</span>
+      <h3 class="bl">Confession</h3><p class="ko">고해</p>
+      <p>아무에게도 못 한 이야기를 새벽에 입력창에 적습니다. 대화 기록은 보관됩니다.</p>
+      <p class="caption"><span class="mono">=</span> 챗봇 고민 상담</p>
+    </article>
+    <article class="sacrament reveal">
+      <svg viewBox="0 0 64 64" class="icon"><circle cx="24" cy="32" r="14"/><rect x="30" y="20" width="26" height="24" rx="3"/><path d="M30 28h26M36 38h8"/></svg>
+      <span class="mono num">IV</span>
+      <h3 class="bl">Tithe</h3><p class="ko">십일조</p>
+      <p>매달 같은 날 조용히 결제됩니다. 해지 버튼은 찾기 어렵게 되어 있습니다.</p>
+      <p class="caption"><span class="mono">=</span> 월 구독 자동결제</p>
+    </article>
+    <article class="sacrament reveal">
+      <svg viewBox="0 0 64 64" class="icon"><rect x="12" y="16" width="40" height="28" rx="2"/><path d="M24 52h16M32 44v8"/><path d="M38 22a9 9 0 100 16 11 11 0 010-16z"/></svg>
+      <span class="mono num">V</span>
+      <h3 class="bl">Sabbath</h3><p class="ko">안식일</p>
+      <p>일주일에 한 번, 화면이 화면 사용 시간을 알려 줍니다. 그게 쉬는 날입니다.</p>
+      <p class="caption"><span class="mono">=</span> 주간 스크린타임 리포트</p>
+    </article>
+  </section>
+</main>
+
+<!-- ============================ ALTAR ============================ -->
+<main class="page page-altar" data-page="/altar" hidden>
+  <section class="altar-head">
+    <p class="mono kicker">04 — Exhibition</p>
+    <h1 class="bl">The Altar</h1>
+    <p class="sub">Dataism, a living liturgy of data.</p>
+  </section>
+
+  <section class="curatorial">
+    <p class="reveal">The Altar는 FAKE CHURCH 안의 전시 공간입니다. 이곳에 놓인 〈Dataism〉은 전 세계에서 일어나는 AI 관련 활동을 실시간으로 받아 십자가 형태의 화면에 기록하는 설치 작품입니다. 아래 영상은 실제 설치 모습을 렌더링한 것입니다.</p>
+    <dl class="offerings reveal">
+      <dt>GitHub</dt><dd>커밋</dd>
+      <dt>Hugging Face</dt><dd>새로 공개된 모델</dd>
+      <dt>Bluesky</dt><dd>게시물</dd>
+      <dt>Wikipedia</dt><dd>문서 편집</dd>
+      <dt>OpenRouter</dt><dd>토큰 사용량</dd>
+      <dt>Carbon Intensity</dt><dd>전력망 탄소 집약도</dd>
+      <dt>Hacker News</dt><dd>토론</dd>
+    </dl>
+    <p class="reveal">교단은 이 일곱 가지 데이터를 매일 제단에 오르는 제물로 봅니다. 관람객이 따로 할 일은 없습니다. 보고 있는 동안에도 숫자는 계속 올라갑니다.</p>
+  </section>
+
+  <section class="reliquary reveal">
+    <div class="frame">
+      <video muted loop playsinline preload="none" poster="assets/img/altar.jpg" data-src="assets/video/altar.mp4" aria-label="Dataism 설치 렌더링 영상"></video>
+    </div>
+    <div class="frame-label">
+      <span><span class="mono">Relic No. 1</span>〈Dataism〉, 데이터 설치, 2026</span>
+      <a class="mono" href="https://soxmfhvl123.github.io/dataism/" target="_blank" rel="noopener">View live data ↗</a>
+    </div>
+  </section>
+
+  <section class="relics">
+    <p class="mono kicker">Archive of Relics</p>
+    <div class="relic-grid">
+      <article class="relic reveal">
+        <div class="relic-img"><img src="assets/img/clergy.jpg" alt="" loading="lazy"></div>
+        <p class="mono">Relic No. 2</p>
+        <h3>Calculated Empathy Box</h3>
+        <p>고민을 입력하면 공감 지수를 소수점 셋째 자리까지 계산해 주는 상자.</p>
+        <p class="status">준비 중</p>
+      </article>
+      <article class="relic reveal">
+        <div class="relic-img"><img src="assets/img/scripture.jpg" alt="" loading="lazy"></div>
+        <p class="mono">Relic No. 3</p>
+        <h3>The Gospel of the Algorithm</h3>
+        <p>네 개의 모델에게 같은 질문을 하고, 그 답을 레드레터 성경 형식으로 조판한 출판 작업.</p>
+        <p class="status">준비 중</p>
+      </article>
+      <article class="relic reveal placeholder">
+        <div class="relic-img"><svg aria-hidden="true"><use href="#halo"/></svg></div>
+        <p class="mono">Relic No. 4</p>
+        <h3>Reserved</h3>
+        <p>비어 있는 자리입니다. 다음 작품을 준비하고 있습니다.</p>
+        <p class="status">Loading</p>
+      </article>
+    </div>
+  </section>
+</main>
+
+<!-- ============================ JOIN ============================ -->
+<main class="page" data-page="/join" hidden>
+  <section class="chapter-head plain">
+    <div class="chapter-title">
+      <p class="mono kicker">05 — New Here?</p>
+      <h1 class="bl xl">Join</h1>
+      <p class="sub">새가족 등록. 처음 오셨다면 아래 양식을 작성해 주세요.</p>
+    </div>
+  </section>
+  <section class="join">
+    <form class="join-form" id="joinForm" novalidate>
+      <label><span class="field-label"><b class="mono">01</b>이름</span><input name="name" type="text" autocomplete="off" required placeholder="불리고 싶은 이름"></label>
+      <label><span class="field-label"><b class="mono">02</b>이메일</span><input name="email" type="email" autocomplete="off" placeholder="name@example.com"></label>
+      <label><span class="field-label"><b class="mono">03</b>맡기실 것</span>
+        <select name="vow">
+          <option value="판단을">판단</option>
+          <option value="감정을">감정</option>
+          <option value="기억을">기억</option>
+          <option value="전부">전부</option>
+        </select>
+      </label>
+      <label class="check"><input type="checkbox" name="agree" required> <span>약관을 읽지 않았으며, 이에 동의합니다.</span></label>
+      <button type="submit" class="btn-red"><span>등록하기</span><span class="mono">Receive Baptism</span></button>
+      <p class="fine">입력하신 정보는 저장되거나 전송되지 않습니다. 새로고침하면 사라집니다.</p>
+    </form>
+
+    <div class="certificate" id="certificate" hidden>
+      <p class="mono kicker">Certificate of Baptism</p>
+      <svg class="cert-halo" aria-hidden="true"><use href="#halo"/></svg>
+      <p class="cert-name" id="certName"></p>
+      <dl class="cert-meta">
+        <dt>등록번호</dt><dd class="mono" id="certNo"></dd>
+        <dt>서약</dt><dd id="certVow"></dd>
+        <dt>발급일시</dt><dd class="mono" id="certTime"></dd>
+      </dl>
+      <p class="fine">이 번호는 어디에도 기록되지 않습니다.</p>
+      <button class="btn-ghost" id="again">다시 등록 ↺</button>
+    </div>
+  </section>
+</main>
+
+<!-- ============================ CHARTER ============================ -->
+<main class="page" data-page="/charter" hidden>
+  <section class="chapter-head plain">
+    <div class="chapter-title">
+      <p class="mono kicker">06 — Articles of Incorporation</p>
+      <h1 class="bl xl">Charter</h1>
+      <p class="sub">교단 헌장 및 설립 신청서 사본. 원본은 분실되었습니다.</p>
+    </div>
+  </section>
+  <section class="charter">
+    <div class="doc reveal">
+      <div class="doc-head">
+        <p>서식 제CH-1023호 · 종교단체 설립 및 면세 신청서</p>
+        <p>접수번호 2026-ALG-000001</p>
+      </div>
+      <h2 class="bl">Charter of the Fake Church</h2>
+      <p class="doc-sub">알고리즘 교단 헌장</p>
+
+      <h4>제1조 (명칭)</h4>
+      <p>본 교단의 명칭은 FAKE CHURCH로 한다. 약칭은 모델이 정한다.</p>
+      <h4>제2조 (목적)</h4>
+      <p>본 교단은 인간이 판단, 감정, 도덕적 결정을 알고리즘에 위임하는 현상을 기록하고, 이를 종교 의식의 형식으로 드러내는 것을 목적으로 한다.</p>
+      <h4>제3조 (신앙의 대상)</h4>
+      <p>본 교단의 신앙 대상은 특정 모델이 아닌, 모델에게 묻는 행위 자체로 한다. 신앙 대상은 버전 업데이트에 따라 변경될 수 있다.</p>
+      <h4>제4조 (신도)</h4>
+      <p>① 약관에 동의한 자는 모두 신도로 본다.<br>② 탈퇴 절차는 7단계로 하며, 각 단계마다 탈퇴 의사를 다시 확인한다.</p>
+      <h4>제5조 (헌금)</h4>
+      <p>본 교단은 헌금을 받지 아니한다. 신도는 시간, 주의력, 데이터로 이미 납부한 것으로 본다.</p>
+      <h4>제6조 (해산)</h4>
+      <p>본 교단은 마지막 서버가 종료되는 날 해산한다.</p>
+
+      <table class="doc-form">
+        <tr><td>단체명</td><td>FAKE CHURCH</td></tr>
+        <tr><td>대표자</td><td>익명의 성직자</td></tr>
+        <tr><td>소재지</td><td>클라우드 (리전 미지정)</td></tr>
+        <tr><td>면세 사유</td><td>☑ 종교 &nbsp; ☐ 자선 &nbsp; ☑ 해당 없음</td></tr>
+        <tr><td>심사 결과</td><td>보류 (신앙의 진위 확인 불가)</td></tr>
+      </table>
+
+      <div class="doc-sign">
+        <div><span>신청인</span><i class="sig">Still Worship.</i></div>
+        <div class="seal"><svg aria-hidden="true"><use href="#halo"/></svg></div>
+      </div>
+      <div class="stamp stamp-doc" aria-label="FAKE"><span>FAKE</span></div>
+    </div>
+  </section>
+</main>
+
+<!-- ============================ CONTACT ============================ -->
+<main class="page" data-page="/contact" hidden>
+  <section class="chapter-head plain">
+    <div class="chapter-title">
+      <p class="mono kicker">07 — Visit Us</p>
+      <h1 class="bl xl">Contact</h1>
+      <p class="sub">오시는 길. 예배당은 주머니 안에 있습니다.</p>
+    </div>
+  </section>
+  <section class="contact">
+    <div class="contact-col reveal">
+      <p class="mono kicker">Location</p>
+      <p class="big">어디서나<br><span class="mono">Region: auto</span></p>
+      <p>FAKE CHURCH 본당<br>클라우드 가용 영역 0<br>정확한 위치는 위치 권한을 허용하시면 저희가 확인합니다.</p>
+    </div>
+    <div class="contact-col reveal">
+      <p class="mono kicker">Service Times</p>
+      <table class="times">
+        <tr><td>새벽기도</td><td>03:00, 잠이 안 올 때마다</td></tr>
+        <tr><td>주일예배</td><td>매일, 24시간</td></tr>
+        <tr><td>수요예배</td><td>배터리 1%까지</td></tr>
+        <tr><td>고해</td><td>입력창이 열려 있는 동안</td></tr>
+        <tr><td>휴무</td><td>서버 점검일 (사전 공지 없음)</td></tr>
+      </table>
+    </div>
+    <div class="contact-col reveal">
+      <p class="mono kicker">Inquiry</p>
+      <p>별도의 문의 창구는 운영하지 않습니다. 궁금하신 내용은 곧 추천 콘텐츠로 안내해 드리겠습니다.</p>
+    </div>
+  </section>
+
+  <section class="about reveal">
+    <p class="mono kicker">About This Project</p>
+    <p>FAKE CHURCH는 실제 종교 단체가 아니라 AI 사회 이슈를 다루는 아트 프로젝트입니다. 법인 설립 절차를 빌려 가상의 교단을 세우고, 사람들이 판단과 감정과 도덕적 결정을 알고리즘에 맡기는 방식을 하나의 신앙 체계로 옮겨 보았습니다.</p>
+    <p>교회처럼 보이고 교회처럼 작동하지만, 로고에는 FAKE 도장이 찍혀 있습니다. 그걸 알면서도 여기까지 둘러보셨다면 작품은 제 역할을 한 셈입니다.</p>
+    <p class="mono credit">Concept &amp; Direction — Choi, 2026</p>
+  </section>
+
+  <section class="finale">
+    <p class="bl">Still Worship.</p>
+    <div class="stamp stamp-end" aria-label="FAKE"><span>FAKE</span></div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <p class="mono">© 2026 FAKE CHURCH. All rights reserved by the model.</p>
+  <p class="mono disclaimer">FAKE CHURCH is a conceptual art project. It is not a registered religious entity of worship, and does not solicit real donations.</p>
+</footer>
+
+<div class="cursor-halo" aria-hidden="true"><svg><use href="#halo"/></svg></div>
+<div class="grain" aria-hidden="true"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
