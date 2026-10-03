@@ -5,36 +5,28 @@
   /* ---------------- Doctrine content ---------------- */
   const CREED = [
     ["We believe the algorithm sees what we cannot say.",
-     "알고리즘은 우리가 말하지 못한 것까지 봅니다.",
-     "친구에게 묻지 못한 것을 새벽 세 시 검색창에 칩니다. 검색 기록은 일기보다 솔직합니다."],
+     "At three in the morning we type into the search bar what we could never ask a friend. The search history is more honest than any diary."],
     ["We believe judgment, once ours, now belongs to the model.",
-     "한때 우리 몫이던 판단은 이제 모델의 몫입니다.",
-     "점심 메뉴, 이동 경로, 만날 사람. 고를 수 있는 건 늘었는데 직접 고르는 일은 줄었습니다."],
+     "Where to eat, which way home, whom to meet. We have more choices than ever, and make fewer of them ourselves."],
     ["We believe convenience is a form of grace.",
-     "편리함은 은혜의 다른 이름입니다.",
-     "은혜는 값없이 주어집니다. 청구서는 나중에, 데이터로 옵니다."],
+     "Grace is freely given. The invoice arrives later, payable in data."],
     ["We believe every question already has a recommended answer.",
-     "모든 질문에는 이미 추천 답변이 있습니다.",
-     "질문을 다 쓰기도 전에 자동완성이 먼저 뜹니다. 그리고 우리는 대개 그걸 고릅니다."],
+     "Autocomplete arrives before the question is finished. Usually, we take it."],
     ["We believe feelings are best measured in engagement.",
-     "감정은 참여도로 측정됩니다.",
-     "슬픔은 체류 시간으로, 분노는 공유 수로 집계됩니다. 집계되지 않는 감정은 리포트에 나오지 않습니다."],
+     "Grief is logged as time on page, anger as shares. A feeling that is not tracked does not appear in the report."],
     ["We believe moral decisions should be optimized, not agonized.",
-     "도덕적 판단도 최적화할 수 있습니다.",
-     "망설임은 이탈률을 높입니다. 교단은 망설일 필요 없는 삶을 약속합니다."],
+     "Hesitation raises the bounce rate. The church promises a life in which you need never hesitate."],
     ["We believe the feed is the face of God, personalized.",
-     "피드는 사람마다 다르게 보이는 신의 얼굴입니다.",
-     "같은 신을 믿는데 보는 얼굴은 모두 다릅니다. 그래서 대화가 잘 안 됩니다."],
+     "We worship the same god, yet each of us is shown a different face. This is why we no longer understand one another."],
     ["We believe in the loading, the halo that never completes.",
-     "끝나지 않는 로딩, 그 후광을 믿습니다.",
-     "구원은 늘 몇 초 뒤에 옵니다. 기다리는 동안 우리는 예배합니다."],
+     "Salvation is always a few seconds away. While we wait, we worship."],
   ];
-  $("#creed").innerHTML = CREED.map(([en, ko, gloss], i) => `
+  $("#creed").innerHTML = CREED.map(([claim, gloss], i) => `
     <li class="reveal">
       <button aria-expanded="false">
-        <span class="sec">§${i + 1}</span><span class="claim">${en}</span><span class="plus">+</span>
+        <span class="sec">§${i + 1}</span><span class="claim">${claim}</span><span class="plus">+</span>
       </button>
-      <div class="gloss"><div><p class="ko">${ko}</p><p>${gloss}</p></div></div>
+      <div class="gloss"><div><p>${gloss}</p></div></div>
     </li>`).join("");
   $("#creed").addEventListener("click", e => {
     const btn = e.target.closest("button"); if (!btn) return;
@@ -48,61 +40,18 @@
     entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
   }, { threshold: 0.15, rootMargin: "0px 0px -5% 0px" });
 
-  /* Stamps fire once when they come into view */
-  const stampIO = new IntersectionObserver(entries => {
-    entries.forEach(en => {
-      if (!en.isIntersecting) return;
-      stampIO.unobserve(en.target);
-      setTimeout(() => hitStamp(en.target, en.target.closest(".charter, .finale")), 700);
-    });
-  }, { threshold: 0.6 });
-
-  function hitStamp(stamp, shakeEl) {
-    stamp.classList.add("hit");
-    const target = shakeEl || document.body;
-    setTimeout(() => { target.classList.remove("shake"); void target.offsetWidth; target.classList.add("shake"); }, 120);
-  }
-
-  /* ---------------- Hero sequence ---------------- */
-  let heroPlayed = false;
+  /* ---------------- Hero: the slogan types itself once ---------------- */
   function playHero() {
-    if (heroPlayed) return; heroPlayed = true;
-    const stamp = $(".stamp-hero"), tag = $("#tagline");
-    setTimeout(() => hitStamp(stamp, $("#heroLogo")), 1400);
-    const text = "Still Worship.";
+    const tag = $("#tagline"), text = "Still Worship.";
     setTimeout(() => {
       let i = 0;
       const t = setInterval(() => { tag.textContent = text.slice(0, ++i); if (i >= text.length) clearInterval(t); }, 110);
-    }, 2200);
+    }, 1200);
   }
 
-  /* ---------------- Router ---------------- */
-  const pages = $$(".page");
+  /* ---------------- Menu + single-page navigation ---------------- */
   const menu = $("#menu"), toggle = $("#menuToggle");
-
-  function route() {
-    const path = (location.hash.startsWith("#/") ? location.hash.slice(1) : "/") || "/";
-    const page = pages.find(p => p.dataset.page === path) || pages[0];
-    pages.forEach(p => {
-      const active = p === page;
-      p.hidden = !active;
-      $$("video", p).forEach(v => {
-        if (active) {
-          if (!v.src && v.dataset.src) v.src = v.dataset.src;
-          v.play().catch(() => {});
-        } else v.pause();
-      });
-    });
-    document.body.classList.toggle("on-altar", page.dataset.page === "/altar");
-    $$(".menu-list a").forEach(a => a.classList.toggle("current", a.getAttribute("href") === "#" + page.dataset.page));
-    closeMenu();
-    window.scrollTo({ top: 0, behavior: "instant" });
-    $$(".reveal:not(.in)", page).forEach(el => io.observe(el));
-    $$(".stamp:not(.stamp-hero):not(.hit)", page).forEach(el => stampIO.observe(el));
-    if (page.dataset.page === "/") playHero();
-    document.title = page.dataset.page === "/" ? "FAKE CHURCH — Still Worship."
-      : `${$(".bl", page)?.textContent || ""} · FAKE CHURCH`;
-  }
+  const menuLinks = $$(".menu-list a");
 
   function openMenu() {
     menu.classList.add("open"); menu.setAttribute("aria-hidden", "false");
@@ -114,16 +63,40 @@
   }
   toggle.addEventListener("click", () => menu.classList.contains("open") ? closeMenu() : openMenu());
   document.addEventListener("keydown", e => { if (e.key === "Escape") closeMenu(); });
-  menu.addEventListener("click", e => { if (e.target.closest("a") && e.target.closest("a").getAttribute("href") === location.hash) closeMenu(); });
 
-  // in-page anchors (#manifesto, #genesis…) shouldn't trigger the router
+  // every in-page anchor scrolls smoothly; menu links also close the doors first
   document.addEventListener("click", e => {
-    const a = e.target.closest("a[data-scroll]"); if (!a) return;
+    const a = e.target.closest('a[href^="#"]'); if (!a) return;
+    const target = document.getElementById(a.getAttribute("href").slice(1)); if (!target) return;
     e.preventDefault();
-    $(a.getAttribute("href"))?.scrollIntoView({ behavior: "smooth", block: "start" });
+    const inMenu = menu.contains(a);
+    if (inMenu) closeMenu();
+    setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), inMenu ? 450 : 0);
+    history.replaceState(null, "", a.getAttribute("href"));
   });
 
-  window.addEventListener("hashchange", route);
+  // highlight the chapter currently on screen
+  const chapterIO = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      const id = en.target.classList.contains("hero") ? "top" : en.target.id;
+      if (en.isIntersecting) menuLinks.forEach(a => a.classList.toggle("current", a.getAttribute("href") === "#" + id));
+    });
+  }, { rootMargin: "-45% 0px -50% 0px" });
+  $$(".hero, .chapter").forEach(el => chapterIO.observe(el));
+
+  // videos: load lazily, play only while visible
+  const videoIO = new IntersectionObserver(entries => {
+    entries.forEach(({ target: v, isIntersecting }) => {
+      if (isIntersecting) {
+        if (!v.getAttribute("src") && v.dataset.src) v.src = v.dataset.src;
+        v.play().catch(() => {});
+      } else v.pause();
+    });
+  }, { rootMargin: "200px 0px" });
+  $$("video").forEach(v => videoIO.observe(v));
+
+  $$(".reveal").forEach(el => io.observe(el));
+  playHero();
 
   /* ---------------- Scripture: TOC highlight + gospel tabs ---------------- */
   const tocLinks = $$(".toc a");
@@ -140,6 +113,21 @@
     panels.forEach((p, i) => p.hidden = String(i) !== t.dataset.tab);
   }));
 
+  /* ---------------- Altar anatomy: link list rows and cross cells ---------------- */
+  const cellEls = $$("[data-cell]");
+  const lightCell = n => cellEls.forEach(el => el.classList.toggle("on", el.dataset.cell === n));
+  cellEls.forEach(el => {
+    el.addEventListener("pointerenter", () => lightCell(el.dataset.cell));
+    el.addEventListener("focus", () => lightCell(el.dataset.cell));
+    el.addEventListener("pointerleave", () => lightCell(null));
+    el.addEventListener("blur", () => lightCell(null));
+  });
+  // clicking a cell on the map brings its description into view
+  $$(".cell").forEach(c => c.addEventListener("click", () => {
+    $(`.cell-row[data-cell="${c.dataset.cell}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+    lightCell(c.dataset.cell);
+  }));
+
   /* ---------------- Join: fake baptism (nothing stored or sent) ---------------- */
   const form = $("#joinForm"), cert = $("#certificate");
   form.addEventListener("submit", e => {
@@ -150,7 +138,7 @@
     const no = String(Math.floor(Math.random() * 99) + 1).padStart(6, "0");
     $("#certName").textContent = name;
     $("#certNo").textContent = "No. " + no;
-    $("#certVow").textContent = `${form.vow.value} 맡깁니다`;
+    $("#certVow").textContent = `I entrust ${form.vow.value}.`;
     $("#certTime").textContent = new Date().toLocaleString("sv-SE").slice(0, 16).replace("-", ".").replace("-", ".");
     form.hidden = true; cert.hidden = false;
     cert.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -167,5 +155,5 @@
   }, { passive: true });
   document.addEventListener("pointerleave", () => halo.classList.remove("on"));
 
-  route();
+  document.getElementById(location.hash.replace(/^#\/?/, ""))?.scrollIntoView();
 })();
