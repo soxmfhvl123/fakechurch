@@ -80,10 +80,15 @@ body { font-size-adjust: 0.47; }
   position: fixed; top: 0; left: 0; right: 0; z-index: 60;
   display: flex; justify-content: space-between; align-items: center;
   padding: 20px var(--gutter) 28px;
-  /* a black fade so text scrolling underneath never meets the nav */
-  background: linear-gradient(to bottom, #000 0, #000 62%, rgba(0,0,0,0));
   pointer-events: none;
 }
+/* a black fade so text scrolling underneath never meets the nav; off while the big mark is in view */
+.masthead::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(to bottom, #000 0, #000 62%, rgba(0,0,0,0));
+  transition: opacity .6s var(--ease);
+}
+html.hero-top .masthead::before { opacity: 0; }
 .masthead > * { pointer-events: auto; }
 .top-nav { display: flex; gap: 28px; }
 .top-nav a {
@@ -153,7 +158,7 @@ html.loading main > :not(.hero), html.loading footer { visibility: hidden; }
 .hero {
   --hero-m: clamp(12px, 1.6vw, 28px);
   position: relative; isolation: isolate; overflow: hidden;
-  padding: 84px var(--hero-m) clamp(32px, 5vh, 72px);
+  padding: 0 var(--hero-m) clamp(32px, 5vh, 72px);
 }
 .hero-copy { position: relative; z-index: 2; }
 .hero-copy h1 { margin: 0; line-height: 0; }
@@ -165,7 +170,7 @@ html.loading main > :not(.hero), html.loading footer { visibility: hidden; }
 /* the supper runs edge to edge and slides up under the mark's descenders */
 .hero-img {
   position: relative; z-index: 1; display: block; height: auto; max-width: none;
-  width: calc(100% + 2 * var(--hero-m)); margin: -8vw calc(-1 * var(--hero-m)) 0;
+  width: calc(100% + 2 * var(--hero-m)); margin: -9vw calc(-1 * var(--hero-m)) 0;
 }
 /* the masthead drops its small logo while the big one is in view */
 .mark-logo { transition: opacity .6s var(--ease); }
