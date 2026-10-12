@@ -40,15 +40,6 @@
     entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); } });
   }, { threshold: 0.15, rootMargin: "0px 0px -5% 0px" });
 
-  /* ---------------- Hero: the slogan types itself once ---------------- */
-  function playHero() {
-    const tag = $("#tagline"), text = "Still Worship.";
-    setTimeout(() => {
-      let i = 0;
-      const t = setInterval(() => { tag.textContent = text.slice(0, ++i); if (i >= text.length) clearInterval(t); }, 110);
-    }, 1200);
-  }
-
   /* ---------------- Menu + single-page navigation ---------------- */
   const menu = $("#menu"), toggle = $("#menuToggle");
   const menuLinks = $$(".menu-list a");
@@ -96,7 +87,6 @@
   $$("video").forEach(v => videoIO.observe(v));
 
   $$(".reveal").forEach(el => io.observe(el));
-  playHero();
 
   /* ---------------- Scripture: TOC highlight + gospel tabs ---------------- */
   const tocLinks = $$(".toc a");
