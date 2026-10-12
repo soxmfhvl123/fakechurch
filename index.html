@@ -69,7 +69,7 @@
 <main id="top">
   <section class="hero">
     <div class="hero-copy">
-      <h1 class="hero-title"><img class="hero-mark hero-still" src="assets/img/wordmark.webp?v=4" alt="Fake Church"><canvas class="hero-mark hero-anim" aria-hidden="true"></canvas></h1>
+      <h1 class="hero-title"><img class="hero-mark hero-still" src="assets/img/wordmark.webp?v=5" alt="Fake Church"><canvas class="hero-mark hero-anim" aria-hidden="true"></canvas></h1>
     </div>
     <img class="hero-img" src="assets/img/hero-supper-cut.webp"
       srcset="assets/img/hero-supper-cut-1200.webp 1200w, assets/img/hero-supper-cut.webp 2400w" sizes="100vw"
@@ -510,7 +510,7 @@
 <div class="cursor-halo" aria-hidden="true"><svg><use href="#halo"/></svg></div>
 <div class="grain" aria-hidden="true"></div>
 
-<script src="split-logo.js?v=5"></script>
+<script src="split-logo.js?v=6"></script>
 <script>
   (function () {
     var root = document.documentElement;
@@ -521,7 +521,7 @@
     var heroCanvas = document.querySelector(".hero-anim");
     if (!calm && heroCanvas && window.SplitLogo) {
       hero.classList.add("anim-on");                 // show the canvas first so it can measure itself
-      SplitLogo.mount(heroCanvas, { src: "assets/img/wordmark.webp?v=4", timeline: "loop", fit: .99 }).ready.then(function (ok) {
+      SplitLogo.mount(heroCanvas, { src: "assets/img/wordmark.webp?v=5", timeline: "loop", fit: .99 }).ready.then(function (ok) {
         if (!ok) hero.classList.remove("anim-on");
       });
     }

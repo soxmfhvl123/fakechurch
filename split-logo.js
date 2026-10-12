@@ -4,7 +4,7 @@
    carries its own copy with the other modes.
 
    SplitLogo.mount(canvas, {
-     src: "assets/img/wordmark.webp",   blackletter artwork (transparent PNG/WebP)
+     src: "assets/img/wordmark.webp?v=5",   blackletter artwork (transparent PNG/WebP)
      timeline: "loop" | "intro",         loop forever, or play the intro once
      fit: .94,                            share of the canvas width the mark may take
      onDone: () => {},                   intro only: called when it has finished
@@ -103,6 +103,7 @@
     function drawB() {
       const c = B.getContext("2d");
       c.clearRect(0, 0, W, H);
+      c.imageSmoothingQuality = "high";             // the artwork is drawn well below its size
       if (logo) c.drawImage(logo, box.x, box.y, box.w, box.h);
     }
 
@@ -213,7 +214,7 @@
       raf = requestAnimationFrame(frame);
     }
 
-    const ready = Promise.all([loadImage(opts.src || "assets/img/wordmark.webp"), fontReady()]).then(([im]) => {
+    const ready = Promise.all([loadImage(opts.src || "assets/img/wordmark.webp?v=5"), fontReady()]).then(([im]) => {
       logo = im;
       if (!logo) { opts.onDone && opts.onDone(); return false; }
       layout();
