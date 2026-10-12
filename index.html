@@ -7,11 +7,22 @@
 <meta name="description" content="FAKE CHURCH. An art project on the age when the algorithm became the new faith.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=19">
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Inter+Tight:wght@800&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css?v=22">
 <link rel="preload" as="image" href="assets/img/hero-supper.jpg" imagesrcset="assets/img/hero-supper-1200.jpg 1200w, assets/img/hero-supper.jpg 2400w" imagesizes="100vw">
+<script>
+  /* loading screen: once per tab session, never for reduced motion */
+  (function () {
+    var seen = false;
+    try { seen = sessionStorage.getItem("fc-loader") === "1"; } catch (e) {}
+    var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.documentElement.classList.add(seen || calm ? "no-loader" : "loading");
+  })();
+</script>
 </head>
 <body>
+
+<div class="loader" id="loader" aria-hidden="true"><canvas class="loader-mark"></canvas></div>
 
 <!-- chrome gradient + halo symbol -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -33,7 +44,7 @@
 <header class="masthead">
   <button class="mark" id="menuToggle" aria-expanded="false" aria-controls="menu">
     <svg class="mark-halo" aria-hidden="true"><use href="#halo"/></svg>
-    <span class="mark-word">Fake Church</span>
+    <img class="mark-logo" src="assets/img/wordmark-sm.webp?v=4" alt="Fake Church" width="480" height="144">
   </button>
   <nav class="top-nav"><a href="shop.html">Shop</a><a href="lookbook.html">Lookbook</a></nav>
 </header>
@@ -65,7 +76,7 @@
       alt="Thirteen figures at a long table in the dark, phones glowing on the cloth, dressed in FAKE CHURCH" fetchpriority="high">
     <div class="hero-veil" aria-hidden="true"></div>
     <div class="hero-copy">
-      <h1><img class="hero-mark" src="assets/img/wordmark.webp?v=3" alt="Fake Church"></h1>
+      <h1 class="hero-title"><img class="hero-mark hero-still" src="assets/img/wordmark.webp?v=4" alt="Fake Church"><canvas class="hero-mark hero-anim" aria-hidden="true"></canvas></h1>
       <p class="tagline mono"><span id="tagline"></span><i class="caret"></i></p>
     </div>
   </section>
@@ -566,6 +577,41 @@
 <div class="cursor-halo" aria-hidden="true"><svg><use href="#halo"/></svg></div>
 <div class="grain" aria-hidden="true"></div>
 
+<script src="split-logo.js?v=2"></script>
+<script>
+  (function () {
+    var root = document.documentElement;
+    var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    /* hero: the split mark loops over the photograph */
+    var heroCanvas = document.querySelector(".hero-anim");
+    if (!calm && heroCanvas && window.SplitLogo) {
+      var hero = document.querySelector(".hero");
+      hero.classList.add("anim-on");                 // show the canvas first so it can measure itself
+      SplitLogo.mount(heroCanvas, { src: "assets/img/wordmark.webp?v=4", timeline: "loop" }).ready.then(function (ok) {
+        if (!ok) hero.classList.remove("anim-on");
+      });
+    }
+
+    /* loading screen: the intro plays once, then waits for the page */
+    var loader = document.getElementById("loader");
+    if (!root.classList.contains("loading") || !window.SplitLogo) { if (loader) loader.remove(); root.classList.remove("loading"); return; }
+    var introDone = false, pageDone = document.readyState === "complete";
+    function leave() {
+      if (!introDone || !pageDone) return;
+      try { sessionStorage.setItem("fc-loader", "1"); } catch (e) {}
+      root.classList.remove("loading");
+      loader.classList.add("out");
+      setTimeout(function () { loader.remove(); }, 900);
+    }
+    addEventListener("load", function () { pageDone = true; leave(); });
+    setTimeout(function () { pageDone = true; leave(); }, 7000);          // never hold the page longer than this
+    SplitLogo.mount(loader.querySelector("canvas"), {
+      src: "assets/img/wordmark.webp?v=4", timeline: "intro",
+      onDone: function () { introDone = true; leave(); },
+    });
+  })();
+</script>
 <script src="app.js?v=13"></script>
 </body>
 </html>

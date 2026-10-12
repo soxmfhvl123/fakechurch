@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Logo Motion · FAKE CHURCH</title>
+<meta name="description" content="FAKE CHURCH logo motion: a grotesque wordmark turns into the blackletter mark and back, in four studies: melt × resolve, split, resolve, melt.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@800&family=EB+Garamond:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg: #0a0a0a; --ink: #f2efe6; --dim: rgba(242,239,230,.45); --red: #c41e1e; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); overflow: hidden; }
+  body { font-family: "EB Garamond", Garamond, serif; }
+  canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+  .grain {
+    position: fixed; inset: 0; pointer-events: none; opacity: .09; mix-blend-mode: overlay;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+  .ui {
+    position: fixed; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    padding: 18px 24px; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--dim);
+  }
+  .ui div { display: flex; gap: 8px; flex-wrap: wrap; }
+  .ui .sep { width: 1px; background: rgba(242,239,230,.18); margin: 0 6px; }
+  .ui button {
+    background: none; border: 1px solid rgba(242,239,230,.18); color: var(--ink); cursor: pointer;
+    font: inherit; letter-spacing: inherit; padding: 8px 12px;
+  }
+  .ui button:hover { border-color: var(--ink); }
+  .ui button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+  .ui .rec[data-on] { border-color: var(--red); color: var(--red); }
+  body.clean .ui { display: none; }
+  @media (max-width: 760px) { .ui { flex-direction: column; align-items: flex-start; } }
+</style>
+</head>
+<body>
+<canvas id="c" aria-label="FAKE CHURCH logo animation: a sans-serif wordmark turns into the blackletter logo and back"></canvas>
+<div class="grain" aria-hidden="true"></div>
+
+<div class="ui">
+  <span id="phase">Fake Church · Logo Motion</span>
+  <div>
+    <button data-mode="meltresolve" aria-pressed="true" title="Key 1">1 Melt × Resolve</button>
+    <button data-mode="split" aria-pressed="false" title="Key 2">2 Split</button>
+    <button data-mode="resolve" aria-pressed="false" title="Key 3">3 Resolve</button>
+    <button data-mode="melt" aria-pressed="false" title="Key 4">4 Melt</button>
+    <span class="sep" aria-hidden="true"></span>
+    <button id="pause" aria-pressed="false">Pause</button>
+    <button id="clean" title="Hide this bar (press H to bring it back)">Hide UI</button>
+    <button id="rec" class="rec">Record loop</button>
+  </div>
+</div>
+
+<script>
+(() => {
+  const MODES = ["meltresolve", "split", "resolve", "melt"];
+  const NAMES = { meltresolve: "Melt × Resolve", split: "Split", resolve: "Resolve", melt: "Melt" };
+  const STEP = 12;                                   // digital moments run at 12 fps
+  const WORD = "FAKE CHURCH";
+  const INK = "#f2efe6", BG = "#0a0a0a";
+  // where the blackletter lowercase body sits in the mark, measured from the artwork
+  const BODY_TOP = .374, BODY_BASE = .781, SEAM = (BODY_TOP + BODY_BASE) / 2;
+  // horizontal extent of "Fake" and "Church" in the mark, as fractions of its width
+  const WORDS = [["FAKE", .03, .372], ["CHURCH", .458, .985]];
+  const TRACK = -.14;                                // grotesque tracking, in em
+
+  /* Timelines in seconds. A = grotesque, B = blackletter. */
+  const SWAP = [                                     // melt, resolve, melt × resolve
+    { kind: "hold", show: "A", d: 2.4 },
+    { kind: "go", from: "A", to: "B", d: 1.2 },
+    { kind: "hold", show: "B", d: 3.0 },
+    { kind: "go", from: "B", to: "A", d: 1.2 },
+  ];
+  // Split: `top` is drawn above the seam, `bot` below. The seam always travels downward.
+  // Seam position: 0 = above the mark (all `bot`), .5 = the cut, 1 = below the mark (all `top`).
+  const SPLIT = [
+    { kind: "seam", top: "B", bot: "A", a: .5, b: .5, d: 2.6 },              // blackletter over grotesque
+    { kind: "seam", top: "B", bot: "A", a: .5, b: 1, d: .9, move: true },
+    { kind: "seam", top: "B", bot: "A", a: 1, b: 1, d: 1.4 },                 // all blackletter
+    { kind: "seam", top: "A", bot: "B", a: 0, b: .5, d: .9, move: true },
+    { kind: "seam", top: "A", bot: "B", a: .5, b: .5, d: 2.6 },               // grotesque over blackletter
+    { kind: "seam", top: "A", bot: "B", a: .5, b: 1, d: .9, move: true },
+    { kind: "seam", top: "A", bot: "B", a: 1, b: 1, d: 1.4 },                 // all grotesque
+    { kind: "seam", top: "B", bot: "A", a: 0, b: .5, d: .9, move: true },
+  ];
+  const timeline = m => (m === "split" ? SPLIT : SWAP);
+  const loopLen = m => timeline(m).reduce((s, x) => s + x.d, 0);
+
+  const params = new URLSearchParams(location.search);
+  let mode = MODES.includes(params.get("mode")) ? params.get("mode") : "meltresolve";
+  const FREEZE = parseFloat(params.get("t"));        // ?t=2.9 freezes the loop at that second
+
+  const cv = document.getElementById("c"), ctx = cv.getContext("2d");
+  const logo = new Image();
+  logo.src = "assets/img/wordmark.webp?v=4";
+
+  const mk = () => document.createElement("canvas");
+  const offA = mk(), offB = mk(), buf = mk(), comp = mk(), small = mk();
+  let W = 0, H = 0, dpr = 1, box = null;
+
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const easeInOut = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+  const easeOut = t => 1 - Math.pow(1 - t, 3);
+  const hash = n => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
+
+  function layout() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = cv.width = Math.round(innerWidth * dpr);
+    H = cv.height = Math.round(innerHeight * dpr);
+    const ratio = logo.naturalHeight / logo.naturalWidth || .3;
+    const bw = Math.min(W * .76, 1500 * dpr), bh = bw * ratio;
+    box = { x: (W - bw) / 2, y: (H - bh) / 2, w: bw, h: bh };
+    for (const o of [offA, offB, buf, comp]) { o.width = W; o.height = H; }
+    drawA(); drawB();
+  }
+
+  /* ---------- the two states, on one baseline ----------
+     The grotesque caps fill exactly the blackletter lowercase body,
+     and the tracking is set so the line runs the width of the mark. */
+  function drawA() {
+    const c = offA.getContext("2d");
+    c.clearRect(0, 0, W, H);
+    const font = sz => `800 ${sz}px "Inter Tight", "Helvetica Neue", Arial, sans-serif`;
+    c.font = font(100);
+    const capRatio = (c.measureText("H").actualBoundingBoxAscent || 72.7) / 100;
+    const size = (BODY_BASE - BODY_TOP) * box.h / capRatio;   // caps fill the blackletter body
+    c.font = font(size);
+    const track = TRACK * size;                      // one tracking for both words
+    c.fillStyle = INK;
+    const base = box.y + BODY_BASE * box.h;
+    for (const [word, a, b] of WORDS) {              // each word centred on its blackletter counterpart
+      const ws = [...word].map(ch => c.measureText(ch).width);
+      const total = ws.reduce((x, y) => x + y, 0) + track * (word.length - 1);
+      let x = box.x + ((a + b) / 2) * box.w - total / 2;
+      [...word].forEach((ch, i) => { c.fillText(ch, x, base); x += ws[i] + track; });
+    }
+  }
+  function drawB() {
+    const c = offB.getContext("2d");
+    c.clearRect(0, 0, W, H);
+    if (logo.naturalWidth) c.drawImage(logo, box.x, box.y, box.w, box.h);
+  }
+
+  /* ---------- building blocks, drawn into any context ---------- */
+  // MELT: every column of the mark runs down like wax
+  function melt(t, src, amt) {
+    if (amt <= 0) { t.drawImage(src, 0, 0); return; }
+    const col = Math.max(2, Math.round(2 * dpr));
+    const x0 = Math.floor(box.x - box.w * .02), x1 = Math.ceil(box.x + box.w * 1.02);
+    const y0 = Math.floor(box.y - box.h * .1), h0 = Math.round(box.h * 1.2);
+    for (let x = x0; x < x1; x += col) {
+      const u = (x - box.x) / box.w;
+      const wave = .5 + .25 * Math.sin(u * 9.1 + 1.3) + .2 * Math.sin(u * 23.7 + 4.1);
+      const drip = hash(Math.floor(u * 140)) > .86 ? 1.6 : 1;
+      t.drawImage(src, x, y0, col + 1, h0, x, y0, col + 1, Math.round(h0 + h0 * amt * .9 * wave * drip));
+    }
+  }
+  // RESOLVE: drop to 1-bit blocks of `block` px inside a horizontal region
+  function pixelate(t, src, block, ry0 = box.y - box.h * .2, ry1 = box.y + box.h * 1.6) {
+    if (block < 1) { t.drawImage(src, 0, 0); return; }
+    const sx = box.x - box.h * .2, sw = box.w + box.h * .4, sy = ry0, sh = ry1 - ry0;
+    const cw = Math.max(1, Math.round(sw / block)), ch = Math.max(1, Math.round(sh / block));
+    small.width = cw; small.height = ch;
+    const c = small.getContext("2d");
+    c.clearRect(0, 0, cw, ch);
+    c.drawImage(src, sx, sy, sw, sh, 0, 0, cw, ch);
+    try {
+      const d = c.getImageData(0, 0, cw, ch), a = d.data;
+      for (let i = 0; i < a.length; i += 4) { a[i] = 242; a[i + 1] = 239; a[i + 2] = 230; a[i + 3] = a[i + 3] > 92 ? 255 : 0; }
+      c.putImageData(d, 0, 0);
+    } catch (e) { /* opened from file://: keep the soft blocks */ }
+    t.imageSmoothingEnabled = false;
+    t.drawImage(small, 0, 0, cw, ch, sx, sy, sw, sh);
+    t.imageSmoothingEnabled = true;
+  }
+  const LADDER = [0, 2, 4, 7, 11, 16, 22, 16, 11, 7, 4, 2, 0];   // block, in 1/100 of mark height
+  const ladder = p => LADDER[clamp(Math.floor(p * LADDER.length), 0, LADDER.length - 1)] / 100 * box.h;
+
+  /* ---------- transitions between A and B ---------- */
+  function transition(from, to, local, dur) {
+    const step = Math.floor(local * STEP);
+    const pq = clamp(step / (dur * STEP), 0, 1);     // stepped progress
+    const ps = clamp(local / dur, 0, 1);             // smooth progress
+    if (mode === "resolve") {
+      pixelate(ctx, pq < .5 ? from : to, ladder(pq));
+    } else if (mode === "melt") {
+      melt(ctx, ps < .5 ? from : to, easeOut(Math.sin(Math.PI * ps)));
+    } else {
+      // melt x resolve: it runs, at the deepest run it breaks into blocks and turns over
+      const b = buf.getContext("2d");
+      b.clearRect(0, 0, W, H);
+      melt(b, ps < .5 ? from : to, easeOut(Math.sin(Math.PI * ps)) * .75);
+      const mid = 1 - Math.abs(pq - .5) * 2;          // 0 at the ends, 1 in the middle
+      pixelate(ctx, buf, mid > .35 ? ladder(pq) : 0);
+    }
+  }
+
+  /* ---------- split: blackletter above the seam, grotesque below ---------- */
+  function split(f, local) {
+    const step = Math.floor(local * STEP);
+    const top = box.y - box.h * .06, cut = box.y + SEAM * box.h, bot = box.y + box.h * 1.06;
+    const seamAt = v => v <= .5 ? top + (cut - top) * (v / .5) : cut + (bot - cut) * ((v - .5) / .5);
+    const q = f.move ? easeInOut(clamp(step / (f.d * STEP), 0, 1)) : 0;
+    const y = Math.round(seamAt(f.a + (f.b - f.a) * q));
+    const kick = f.move ? Math.sin(Math.PI * q) : 0;
+    const dx = Math.round(kick * box.w * .012);
+    const S = { A: offA, B: offB };
+    const c = comp.getContext("2d");
+    c.clearRect(0, 0, W, H);
+    c.drawImage(S[f.top], 0, 0, W, y, -dx, 0, W, y);
+    c.drawImage(S[f.bot], 0, y, W, H - y, dx, y, W, H - y);
+    ctx.drawImage(comp, 0, 0);
+    if (f.move) {                                    // travelling: the cut breaks into coarse blocks
+      const band = box.h * .16;
+      ctx.fillStyle = BG; ctx.fillRect(0, y - band / 2, W, band);
+      pixelate(ctx, comp, box.h * (.03 + .05 * kick), y - band / 2, y + band / 2);
+      return "cut moving";
+    }
+    if (f.a === .5) return f.top === "B" ? "blackletter over grotesque" : "grotesque over blackletter";
+    return f.top === "B" ? "blackletter" : "grotesque";
+  }
+
+  /* ---------- clock ---------- */
+  let start = performance.now(), paused = false, pausedAt = 0, lastLabel = "";
+  const label = document.getElementById("phase");
+
+  function frame(now) {
+    const t = Number.isFinite(FREEZE) ? FREEZE : ((paused ? pausedAt : now) - start) / 1000;
+    const L = loopLen(mode), lt = ((t % L) + L) % L;
+    ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
+
+    let acc = 0, seg = timeline(mode)[0], local = 0;
+    for (const f of timeline(mode)) { if (lt < acc + f.d) { seg = f; local = lt - acc; break; } acc += f.d; }
+    const S = { A: offA, B: offB };
+    let phase;
+    if (seg.kind === "hold") { ctx.drawImage(S[seg.show], 0, 0); phase = seg.show === "A" ? "grotesque" : "blackletter"; }
+    else if (seg.kind === "go") { transition(S[seg.from], S[seg.to], local, seg.d); phase = seg.to === "B" ? "→ blackletter" : "→ grotesque"; }
+    else phase = split(seg, local);
+
+    const text = `Fake Church · ${NAMES[mode]} · ${phase}`;
+    if (text !== lastLabel) { label.textContent = text; lastLabel = text; }
+    requestAnimationFrame(frame);
+  }
+
+  /* ---------- controls ---------- */
+  const modeBtns = [...document.querySelectorAll("[data-mode]")];
+  function setMode(m) {
+    mode = m;
+    modeBtns.forEach(b => b.setAttribute("aria-pressed", b.dataset.mode === m));
+    const u = new URL(location); u.searchParams.set("mode", m); history.replaceState(null, "", u);
+  }
+  modeBtns.forEach(b => b.addEventListener("click", () => setMode(b.dataset.mode)));
+  setMode(mode);
+
+  const pauseBtn = document.getElementById("pause");
+  pauseBtn.addEventListener("click", () => {
+    paused = !paused;
+    if (paused) pausedAt = performance.now(); else start += performance.now() - pausedAt;
+    pauseBtn.setAttribute("aria-pressed", paused);
+    pauseBtn.textContent = paused ? "Play" : "Pause";
+  });
+  document.getElementById("clean").addEventListener("click", () => document.body.classList.add("clean"));
+  addEventListener("keydown", e => {
+    const i = "1234".indexOf(e.key);
+    if (i >= 0) setMode(MODES[i]);
+    if (e.key === "h" || e.key === "H") document.body.classList.toggle("clean");
+    if (e.key === " ") { e.preventDefault(); pauseBtn.click(); }
+  });
+
+  // record exactly one loop of the current mode, from the top, as WebM
+  const recBtn = document.getElementById("rec");
+  recBtn.addEventListener("click", () => {
+    if (!window.MediaRecorder || !cv.captureStream) { recBtn.textContent = "Not supported"; return; }
+    const stream = cv.captureStream(60);
+    const type = MediaRecorder.isTypeSupported("video/webm;codecs=vp9") ? "video/webm;codecs=vp9" : "video/webm";
+    const rec = new MediaRecorder(stream, { mimeType: type, videoBitsPerSecond: 16e6 });
+    const chunks = [];
+    rec.ondataavailable = e => e.data.size && chunks.push(e.data);
+    rec.onstop = () => {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob(chunks, { type: "video/webm" }));
+      a.download = `fake-church-logo-${mode}.webm`;
+      a.click();
+      recBtn.textContent = "Record loop"; delete recBtn.dataset.on;
+    };
+    if (paused) pauseBtn.click();
+    start = performance.now();
+    rec.start();
+    recBtn.textContent = "Recording…"; recBtn.dataset.on = "";
+    setTimeout(() => rec.stop(), loopLen(mode) * 1000 + 60);
+  });
+
+  /* ---------- go ---------- */
+  addEventListener("resize", layout);
+  Promise.all([
+    new Promise(res => logo.complete && logo.naturalWidth ? res() : (logo.onload = res, logo.onerror = res)),
+    document.fonts ? document.fonts.load('800 100px "Inter Tight"').catch(() => {}) : null,
+  ]).then(() => { layout(); requestAnimationFrame(frame); });
+})();
+</script>
+</body>
+</html>
