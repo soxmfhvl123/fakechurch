@@ -8,10 +8,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Inter+Tight:wght@800&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=25">
-<link rel="preload" as="image" href="assets/img/hero-supper.jpg" imagesrcset="assets/img/hero-supper-1200.jpg 1200w, assets/img/hero-supper.jpg 2400w" imagesizes="100vw">
+<link rel="stylesheet" href="styles.css?v=26">
+<link rel="preload" as="image" href="assets/img/hero-supper-cut.webp" imagesrcset="assets/img/hero-supper-cut-1200.webp 1200w, assets/img/hero-supper-cut.webp 2400w" imagesizes="100vw">
 <script>
-  /* loading screen: once per tab session, never for reduced motion */
+  /* opening: once per tab session, never for reduced motion. The mark plays alone on black,
+     then the supper and the masthead fade in around it. */
   (function () {
     var seen = false;
     try { seen = sessionStorage.getItem("fc-loader") === "1"; } catch (e) {}
@@ -21,8 +22,6 @@
 </script>
 </head>
 <body class="chic">
-
-<div class="loader" id="loader" aria-hidden="true"><canvas class="loader-mark"></canvas></div>
 
 <!-- chrome gradient + halo symbol -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -70,13 +69,12 @@
 <!-- ============================ HOME ============================ -->
 <main id="top">
   <section class="hero">
-    <img class="hero-img" src="assets/img/hero-supper.jpg"
-      srcset="assets/img/hero-supper-1200.jpg 1200w, assets/img/hero-supper.jpg 2400w" sizes="100vw"
-      alt="Thirteen figures at a long table in the dark, phones glowing on the cloth, dressed in FAKE CHURCH" fetchpriority="high">
-    <div class="hero-veil" aria-hidden="true"></div>
     <div class="hero-copy">
       <h1 class="hero-title"><img class="hero-mark hero-still" src="assets/img/wordmark.webp?v=4" alt="Fake Church"><canvas class="hero-mark hero-anim" aria-hidden="true"></canvas></h1>
     </div>
+    <img class="hero-img" src="assets/img/hero-supper-cut.webp"
+      srcset="assets/img/hero-supper-cut-1200.webp 1200w, assets/img/hero-supper-cut.webp 2400w" sizes="100vw"
+      alt="Thirteen figures at a long table in the dark, phones glowing on the cloth, dressed in FAKE CHURCH" fetchpriority="high">
   </section>
 
   <section class="manifesto" id="manifesto">
@@ -575,39 +573,40 @@
 <div class="cursor-halo" aria-hidden="true"><svg><use href="#halo"/></svg></div>
 <div class="grain" aria-hidden="true"></div>
 
-<script src="split-logo.js?v=4"></script>
+<script src="split-logo.js?v=5"></script>
 <script>
   (function () {
     var root = document.documentElement;
     var calm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    /* hero: the split mark loops over the photograph */
+    /* hero: the split mark loops across the top, over the supper */
+    var hero = document.querySelector(".hero");
     var heroCanvas = document.querySelector(".hero-anim");
     if (!calm && heroCanvas && window.SplitLogo) {
-      var hero = document.querySelector(".hero");
       hero.classList.add("anim-on");                 // show the canvas first so it can measure itself
-      SplitLogo.mount(heroCanvas, { src: "assets/img/wordmark.webp?v=4", timeline: "loop" }).ready.then(function (ok) {
+      SplitLogo.mount(heroCanvas, { src: "assets/img/wordmark.webp?v=4", timeline: "loop", fit: .99 }).ready.then(function (ok) {
         if (!ok) hero.classList.remove("anim-on");
       });
     }
 
-    /* loading screen: the intro plays once, then waits for the page */
-    var loader = document.getElementById("loader");
-    if (!root.classList.contains("loading") || !window.SplitLogo) { if (loader) loader.remove(); root.classList.remove("loading"); return; }
-    var introDone = false, pageDone = document.readyState === "complete";
+    /* while the big mark is on screen the masthead carries no logo of its own */
+    if (window.IntersectionObserver) {
+      new IntersectionObserver(function (es) { root.classList.toggle("hero-top", es[0].isIntersecting); })
+        .observe(document.querySelector(".hero-title"));
+    }
+
+    /* opening: the mark alone on black for a moment, then the rest fades in */
+    if (!root.classList.contains("loading")) return;
+    var t0 = Date.now(), pageDone = document.readyState === "complete", left = false;
     function leave() {
-      if (!introDone || !pageDone) return;
+      if (left || !pageDone || Date.now() - t0 < 2600) return;
+      left = true;
       try { sessionStorage.setItem("fc-loader", "1"); } catch (e) {}
       root.classList.remove("loading");
-      loader.classList.add("out");
-      setTimeout(function () { loader.remove(); }, 900);
     }
     addEventListener("load", function () { pageDone = true; leave(); });
+    setTimeout(function () { leave(); }, 2650);
     setTimeout(function () { pageDone = true; leave(); }, 7000);          // never hold the page longer than this
-    SplitLogo.mount(loader.querySelector("canvas"), {
-      src: "assets/img/wordmark.webp?v=4", timeline: "intro",
-      onDone: function () { introDone = true; leave(); },
-    });
   })();
 </script>
 <script src="app.js?v=14"></script>
