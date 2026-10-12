@@ -133,7 +133,7 @@
 
   const cv = document.getElementById("c"), ctx = cv.getContext("2d");
   const logo = new Image();
-  logo.src = "assets/img/wordmark.webp?v=4";
+  logo.src = "assets/img/wordmark.webp?v=5";
 
   const mk = () => document.createElement("canvas");
   const offA = mk(), offB = mk(), buf = mk(), comp = mk(), small = mk();
@@ -185,6 +185,7 @@
   function drawB() {
     const c = offB.getContext("2d");
     c.clearRect(0, 0, W, H);
+    c.imageSmoothingQuality = "high";
     if (logo.naturalWidth) c.drawImage(logo, box.x, box.y, box.w, box.h);
   }
 
