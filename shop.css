@@ -5,7 +5,7 @@
   position: sticky; top: 68px; z-index: 20;
   display: flex; justify-content: space-between; align-items: center; gap: 24px;
   padding: 12px var(--gutter);
-  background: rgba(10,10,10,.86); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  background: rgba(0,0,0,.86); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
   border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
 }
 .filters { display: flex; flex-wrap: wrap; gap: 4px 24px; }
