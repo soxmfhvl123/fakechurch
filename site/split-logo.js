@@ -16,22 +16,20 @@
   const WORDS = [["FAKE", .03, .372], ["CHURCH", .458, .985]];   // "Fake" and "Church" spans
   const TRACK = -.14;                               // grotesque tracking, in em
 
-  // `top` is drawn above the seam, `bot` below; the seam always travels downward.
-  // Seam: 0 = above the mark (all `bot`), .5 = the cut, 1 = below the mark (all `top`).
+  // A state is `top` above the cut and `bot` below it; s = where the cut sits
+  // (0 = above the mark, all `bot`; .5 = the middle of the lowercase; 1 = below, all `top`).
+  // A move wipes downward from one state to the next, so the two faces are always cut together.
+  const BA = { top: "B", bot: "A", s: .5 }, AB = { top: "A", bot: "B", s: .5 };
   const LOOP = [
-    { top: "B", bot: "A", a: .5, b: .5, d: 2.6 },
-    { top: "B", bot: "A", a: .5, b: 1, d: .9, move: true },
-    { top: "B", bot: "A", a: 1, b: 1, d: 1.4 },
-    { top: "A", bot: "B", a: 0, b: .5, d: .9, move: true },
-    { top: "A", bot: "B", a: .5, b: .5, d: 2.6 },
-    { top: "A", bot: "B", a: .5, b: 1, d: .9, move: true },
-    { top: "A", bot: "B", a: 1, b: 1, d: 1.4 },
-    { top: "B", bot: "A", a: 0, b: .5, d: .9, move: true },
+    { from: BA, to: BA, d: 1.5 },               // blackletter over grotesque
+    { from: BA, to: AB, d: .8, move: true },
+    { from: AB, to: AB, d: 1.5 },               // grotesque over blackletter
+    { from: AB, to: BA, d: .8, move: true },
   ];
   const INTRO = [
-    { top: "B", bot: "A", a: .5, b: .5, d: 1.1 },
-    { top: "B", bot: "A", a: .5, b: 1, d: .9, move: true },
-    { top: "B", bot: "A", a: 1, b: 1, d: .7 },
+    { from: BA, to: BA, d: 1.1 },
+    { from: BA, to: { top: "B", bot: "B", s: .5 }, d: .9, move: true },
+    { from: { top: "B", bot: "B", s: .5 }, to: { top: "B", bot: "B", s: .5 }, d: .7 },
   ];
 
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
@@ -109,22 +107,28 @@
     function render(f, local) {
       const step = Math.floor(local * STEP);
       const top = box.y - box.h * .06, cut = box.y + SEAM * box.h, bot = box.y + box.h * 1.06;
-      const seamAt = v => v <= .5 ? top + (cut - top) * (v / .5) : cut + (bot - cut) * ((v - .5) / .5);
-      const q = f.move ? easeInOut(clamp(step / (f.d * STEP), 0, 1)) : 0;
-      const y = Math.round(seamAt(f.a + (f.b - f.a) * q));
+      const seamAt = v => Math.round(v <= .5 ? top + (cut - top) * (v / .5) : cut + (bot - cut) * ((v - .5) / .5));
+      const q = f.move ? easeInOut(clamp(step / (f.d * STEP), 0, 1)) : 1;
+      const w = f.move ? Math.round(top + (bot - top) * q) : H;   // rows above w show `to`
       const kick = f.move ? Math.sin(Math.PI * q) : 0;
       const dx = Math.round(kick * box.w * .012);
       const S = { A, B };
       const c = comp.getContext("2d");
+      const rows = (src, y0, y1, ox) => { if (y1 > y0) c.drawImage(src, 0, y0, W, y1 - y0, ox, y0, W, y1 - y0); };
+      const state = (st, y0, y1, ox) => {
+        const ys = seamAt(st.s);
+        rows(S[st.top], y0, Math.min(y1, ys), ox);
+        rows(S[st.bot], Math.max(y0, ys), y1, ox);
+      };
       c.clearRect(0, 0, W, H);
-      c.drawImage(S[f.top], 0, 0, W, y, -dx, 0, W, y);
-      c.drawImage(S[f.bot], 0, y, W, H - y, dx, y, W, H - y);
+      state(f.to, 0, w, -dx);
+      state(f.from, w, H, dx);
       ctx.clearRect(0, 0, W, H);
       ctx.drawImage(comp, 0, 0);
       if (f.move) {
         const band = box.h * .16;
-        ctx.clearRect(0, y - band / 2, W, band);
-        pixelate(comp, box.h * (.03 + .05 * kick), y - band / 2, y + band / 2);
+        ctx.clearRect(0, w - band / 2, W, band);
+        pixelate(comp, box.h * (.03 + .05 * kick), w - band / 2, w + band / 2);
       }
     }
 
