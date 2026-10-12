@@ -4,12 +4,11 @@
   const won = n => "₩" + n.toLocaleString("en-US");
   const pad = n => String(n).padStart(2, "0");
 
-  // one running sequence for the full-screen view: silver details first, then the looks
+  // one running sequence for the full-screen view: the opening plate, the silver figures, the closing plate
   const B = window.BLEED || {};
   const frames = [
     ...(B.first ? [{ ...B.first, bleed: "first" }] : []),
-    ...(window.SILVER || []).map(s => ({ ...s, key: `silver-${pad(s.no)}`, title: `Silver ${pad(s.no)}`, kicker: "Detail" })),
-    ...(window.LOOKS || []).map(l => ({ ...l, key: `look-${pad(l.no)}`, title: `Look ${pad(l.no)}`, kicker: `${l.model} · ${l.light}` })),
+    ...(window.SILVER || []).map(s => ({ ...s, key: `figure-${pad(s.no)}`, title: `Figure ${pad(s.no)}`, kicker: "Silver" })),
     ...(B.last ? [{ ...B.last, bleed: "last" }] : []),
   ];
 
@@ -23,8 +22,7 @@
     .map(i => `<li><a href="${i.href}">${i.name}</a><span class="mono">${i.price}</span></li>`).join("");
 
   /* ---------------- Grid ----------------
-     Editorial layouts on 12 columns: [column, aspect ratio, drop from the row top].
-     Each set repeats its own pattern. */
+     An editorial layout on 12 columns: [column, aspect ratio, drop from the row top], repeating. */
   const LAYOUTS = {
     silver: [
       ["1 / span 6", "1 / 1", 0],
@@ -35,15 +33,6 @@
       ["1 / span 12", "16 / 7", 0],
       ["3 / span 4", "4 / 5", 0],
       ["8 / span 5", "1 / 1", .45],
-    ],
-    look: [
-      ["1 / span 7", "4 / 5", 0],
-      ["9 / span 4", "1 / 1", 1],
-      ["2 / span 4", "3 / 4", 0],
-      ["7 / span 6", "1 / 1", .55],
-      ["1 / span 12", "16 / 7", 0],
-      ["3 / span 5", "4 / 5", 0],
-      ["9 / span 4", "3 / 4", .8],
     ],
   };
   const card = (f, i, n, set) => {
@@ -69,15 +58,12 @@
   const divider = (label, note) => `
     <header class="lb-divider reveal"><p class="mono">${label}</p><p class="mono">${note}</p></header>`;
 
-  const silver = frames.filter(f => f.key.startsWith("silver"));
-  const looks = frames.filter(f => f.key.startsWith("look"));
+  const silver = frames.filter(f => f.key.startsWith("figure"));
   let html = "";
   const first = frames.find(f => f.bleed === "first"), last = frames.find(f => f.bleed === "last");
   if (first) html += bleed(first);
   if (silver.length) html += divider("Silver", `${pad(silver.length)} details · 925 sterling`)
     + silver.map((f, n) => card(f, frames.indexOf(f), n, "silver")).join("");
-  if (looks.length) html += divider("Looks", `${pad(looks.length)} looks · Season 01`)
-    + looks.map((f, n) => card(f, frames.indexOf(f), n, "look")).join("");
   if (last) html += bleed(last);
   $("#lookGrid").innerHTML = html;
 
@@ -145,9 +131,10 @@
     halo.classList.toggle("on", !!e.target.closest("a, button"));
   }, { passive: true });
 
-  // deep link: lookbook.html#look-02 or #silver-03
+  // deep link: lookbook.html#figure-03 (the old #silver-03 still works)
   if (location.hash.length > 1) {
-    const i = frames.findIndex(f => f.key === location.hash.slice(1));
+    const key = location.hash.slice(1).replace(/^silver-/, "figure-");
+    const i = frames.findIndex(f => f.key === key);
     if (i >= 0) open(i);
   }
 })();
