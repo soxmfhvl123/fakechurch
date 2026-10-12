@@ -6,6 +6,7 @@
    SplitLogo.mount(canvas, {
      src: "assets/img/wordmark.webp",   blackletter artwork (transparent PNG/WebP)
      timeline: "loop" | "intro",         loop forever, or play the intro once
+     fit: .94,                            share of the canvas width the mark may take
      onDone: () => {},                   intro only: called when it has finished
    })
 */
@@ -70,7 +71,7 @@
       H = canvas.height = Math.max(1, Math.round(r.height * dpr));
       const ratio = logo ? logo.naturalHeight / logo.naturalWidth : .3;
       // the mark fills the width, with room for the descending flourishes
-      const bw = Math.min(W * .94, H / ratio * .78), bh = bw * ratio;
+      const bw = Math.min(W * (opts.fit || .94), H / ratio * .78), bh = bw * ratio;
       box = { x: (W - bw) / 2, y: (H - bh) / 2, w: bw, h: bh };
       for (const o of [A, B, comp]) { o.width = W; o.height = H; }
       drawA(); drawB();
