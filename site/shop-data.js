@@ -8,7 +8,7 @@ window.PRODUCTS = [
     "price": 590000,
     "desc": "All-black varsity in wool and leather. FA KE CH stacked in raised blackletter on the chest.",
     "images": [
-      "assets/shop/varsity-jacket-1.jpg?v=2"
+      "assets/shop/varsity-jacket-1.jpg?v=3"
     ],
     "sizes": [
       "S",
@@ -39,7 +39,7 @@ window.PRODUCTS = [
     "price": 289000,
     "desc": "Black denim with FAKE CHURCH running down both legs in oversized blackletter.",
     "images": [
-      "assets/shop/stacked-denim-1.jpg?v=2"
+      "assets/shop/stacked-denim-1.jpg?v=3"
     ],
     "sizes": [
       "S",
@@ -70,7 +70,7 @@ window.PRODUCTS = [
     "price": 459000,
     "desc": "Nylon MA-1 bomber with the FC monogram on the chest.",
     "images": [
-      "assets/shop/ma1-bomber-1.jpg?v=2"
+      "assets/shop/ma1-bomber-1.jpg?v=3"
     ],
     "sizes": [
       "S",
@@ -101,7 +101,7 @@ window.PRODUCTS = [
     "price": 89000,
     "desc": "Heavyweight boxy tee. Fake Church embroidered small on the chest.",
     "images": [
-      "assets/shop/boxy-tee-1.jpg?v=2"
+      "assets/shop/boxy-tee-1.jpg?v=3"
     ],
     "sizes": [
       "S",
@@ -132,7 +132,7 @@ window.PRODUCTS = [
     "price": 159000,
     "desc": "Heavyweight crewneck sweatshirt with the FC monogram at the chest.",
     "images": [
-      "assets/shop/fc-crewneck-1.jpg?v=2"
+      "assets/shop/fc-crewneck-1.jpg?v=3"
     ],
     "sizes": [
       "S",
@@ -163,7 +163,7 @@ window.PRODUCTS = [
     "price": 149000,
     "desc": "Cuffed sweatpants, Fake Church across the thigh.",
     "images": [
-      "assets/shop/sweatpants-1.jpg?v=2"
+      "assets/shop/sweatpants-1.jpg?v=3"
     ],
     "sizes": [
       "S",
@@ -194,7 +194,7 @@ window.PRODUCTS = [
     "price": 109000,
     "desc": "Heavy sweat shorts, Fake Church across the front.",
     "images": [
-      "assets/shop/sweat-shorts-1.jpg?v=2"
+      "assets/shop/sweat-shorts-1.jpg?v=3"
     ],
     "sizes": [
       "S",
@@ -225,7 +225,7 @@ window.PRODUCTS = [
     "price": 69000,
     "desc": "Satin-front trucker cap, Fake Church embroidered across the crown.",
     "images": [
-      "assets/shop/trucker-cap-1.jpg?v=2"
+      "assets/shop/trucker-cap-1.jpg?v=3"
     ],
     "sizes": null,
     "specs": [
@@ -251,7 +251,7 @@ window.PRODUCTS = [
     "price": 59000,
     "desc": "Ribbed knit beanie, Fake Church embroidered on the cuff.",
     "images": [
-      "assets/shop/ribbed-beanie-1.jpg?v=2"
+      "assets/shop/ribbed-beanie-1.jpg?v=3"
     ],
     "sizes": null,
     "specs": [
