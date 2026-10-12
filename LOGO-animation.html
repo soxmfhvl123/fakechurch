@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Logo Motion · FAKE CHURCH</title>
-<meta name="description" content="FAKE CHURCH logo motion: a grotesque wordmark turns into the blackletter mark and back, in four studies: melt × resolve, split, resolve, melt.">
+<meta name="description" content="FAKE CHURCH logo motion: a grotesque wordmark turns into the blackletter mark and back, in ten studies: melt × resolve, split, resolve, melt, wave, counter, wave × counter, interlace, blade, cursor and random.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@800&family=EB+Garamond:wght@500&display=swap" rel="stylesheet">
@@ -46,6 +46,13 @@
     <button data-mode="split" aria-pressed="false" title="Key 2">2 Split</button>
     <button data-mode="resolve" aria-pressed="false" title="Key 3">3 Resolve</button>
     <button data-mode="melt" aria-pressed="false" title="Key 4">4 Melt</button>
+    <button data-mode="wave" aria-pressed="false" title="Key 5">5 Wave</button>
+    <button data-mode="counter" aria-pressed="false" title="Key 6">6 Counter</button>
+    <button data-mode="wavecounter" aria-pressed="false" title="Key 7">7 Wave × Counter</button>
+    <button data-mode="interlace" aria-pressed="false" title="Key 8">8 Interlace</button>
+    <button data-mode="blade" aria-pressed="false" title="Key 9">9 Blade</button>
+    <button data-mode="cursor" aria-pressed="false" title="Key 0">0 Cursor</button>
+    <button data-mode="random" aria-pressed="false" title="Key R">R Random</button>
     <span class="sep" aria-hidden="true"></span>
     <button id="pause" aria-pressed="false">Pause</button>
     <button id="clean" title="Hide this bar (press H to bring it back)">Hide UI</button>
@@ -55,8 +62,11 @@
 
 <script>
 (() => {
-  const MODES = ["meltresolve", "split", "resolve", "melt"];
-  const NAMES = { meltresolve: "Melt × Resolve", split: "Split", resolve: "Resolve", melt: "Melt" };
+  const MODES = ["meltresolve", "split", "resolve", "melt", "wave", "counter", "wavecounter", "interlace", "blade", "cursor", "random"];
+  const NAMES = {
+    meltresolve: "Melt × Resolve", split: "Split", resolve: "Resolve", melt: "Melt", wave: "Wave", counter: "Counter",
+    wavecounter: "Wave × Counter", interlace: "Interlace", blade: "Blade", cursor: "Cursor", random: "Random",
+  };
   const STEP = 12;                                   // digital moments run at 12 fps
   const WORD = "FAKE CHURCH";
   const INK = "#f2efe6", BG = "#0a0a0a";
@@ -82,8 +92,40 @@
     { kind: "seam", from: AB, to: AB, d: 1.5 },              // grotesque over blackletter
     { kind: "seam", from: AB, to: BA, d: .8, move: true },
   ];
+  // Wave, Counter, Wave × Counter: every letter column keeps its own cut (bTop = blackletter above it).
+  // A flip wipes one letter to the other state: [start, duration, dir], dir 1 = downward, -1 = upward.
+  const LETTER_PLANS = {
+    wave: {                                          // a ripple left to right, back right to left
+      L: 6.4, init: () => true,
+      flips: i => [[.9 + i * .11, .55, 1], [4.0 + (9 - i) * .09, .5, -1]],
+    },
+    counter: {                                       // FAKE and CHURCH always opposite, crossing together
+      L: 5.6, init: i => i < 4,
+      flips: i => [[1.4, .7, i < 4 ? 1 : -1], [4.2, .7, i < 4 ? -1 : 1]],
+    },
+    wavecounter: {                                   // opposite words; the ripples meet in the gap, then part
+      L: 6.4, init: i => i < 4,
+      flips: i => {
+        const meet = i < 4 ? i * .16 : (9 - i) * .1, part = i < 4 ? (3 - i) * .16 : (i - 4) * .1;
+        return [[1.0 + meet, .5, i < 4 ? 1 : -1], [3.9 + part, .5, i < 4 ? -1 : 1]];
+      },
+    },
+  };
+  // Interlace: [strips, blackletter on the strip above the cut, seconds]; an irregular breath
+  const INTERLACE = [
+    [2, true, 1.3], [4, true, .45], [8, true, .3], [16, true, .22], [8, false, .28], [4, false, .4],
+    [2, false, 1.3], [4, false, .45], [8, false, .3], [16, false, .22], [8, true, .28], [4, true, .4],
+  ];
+  // Blade: the cut turns about the gap between the words; [hold, spin] pairs, half a turn per spin
+  const BLADE = [[2.1, .85], [1.5, .7]];
+  const sum = a => a.reduce((x, y) => x + y, 0);
   const timeline = m => (m === "split" ? SPLIT : SWAP);
-  const loopLen = m => timeline(m).reduce((s, x) => s + x.d, 0);
+  const loopLen = m =>
+    LETTER_PLANS[m] ? LETTER_PLANS[m].L :
+    m === "interlace" ? sum(INTERLACE.map(x => x[2])) :
+    m === "blade" ? sum(BLADE.flat()) * 2 :
+    m === "cursor" ? 8 :
+    timeline(m).reduce((s, x) => s + x.d, 0);
 
   const params = new URLSearchParams(location.search);
   let mode = MODES.includes(params.get("mode")) ? params.get("mode") : "meltresolve";
@@ -95,7 +137,7 @@
 
   const mk = () => document.createElement("canvas");
   const offA = mk(), offB = mk(), buf = mk(), comp = mk(), small = mk();
-  let W = 0, H = 0, dpr = 1, box = null;
+  let W = 0, H = 0, dpr = 1, box = null, COLS = [];
 
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const easeInOut = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
@@ -127,12 +169,18 @@
     const track = TRACK * size;                      // one tracking for both words
     c.fillStyle = INK;
     const base = box.y + BODY_BASE * box.h;
+    const centres = [];
     for (const [word, a, b] of WORDS) {              // each word centred on its blackletter counterpart
       const ws = [...word].map(ch => c.measureText(ch).width);
       const total = ws.reduce((x, y) => x + y, 0) + track * (word.length - 1);
       let x = box.x + ((a + b) / 2) * box.w - total / 2;
-      [...word].forEach((ch, i) => { c.fillText(ch, x, base); x += ws[i] + track; });
+      [...word].forEach((ch, i) => { c.fillText(ch, x, base); centres.push(x + ws[i] / 2); x += ws[i] + track; });
     }
+    // one column per letter, split halfway between neighbours, the outer ones running to the edges
+    COLS = centres.map((x, i) => [
+      i ? Math.round((centres[i - 1] + x) / 2) : 0,
+      i < centres.length - 1 ? Math.round((x + centres[i + 1]) / 2) : W,
+    ]);
   }
   function drawB() {
     const c = offB.getContext("2d");
@@ -155,9 +203,10 @@
     }
   }
   // RESOLVE: drop to 1-bit blocks of `block` px inside a horizontal region
-  function pixelate(t, src, block, ry0 = box.y - box.h * .2, ry1 = box.y + box.h * 1.6) {
+  function pixelate(t, src, block, ry0 = box.y - box.h * .2, ry1 = box.y + box.h * 1.6,
+                    rx0 = box.x - box.h * .2, rx1 = box.x + box.w + box.h * .2) {
     if (block < 1) { t.drawImage(src, 0, 0); return; }
-    const sx = box.x - box.h * .2, sw = box.w + box.h * .4, sy = ry0, sh = ry1 - ry0;
+    const sx = rx0, sw = rx1 - rx0, sy = ry0, sh = ry1 - ry0;
     const cw = Math.max(1, Math.round(sw / block)), ch = Math.max(1, Math.round(sh / block));
     small.width = cw; small.height = ch;
     const c = small.getContext("2d");
@@ -224,6 +273,151 @@
     return f.to.top === "B" ? "blackletter over grotesque" : "grotesque over blackletter";
   }
 
+  /* ---------- shared cut geometry ---------- */
+  const span = () => ({ top: box.y - box.h * .06, cut: Math.round(box.y + SEAM * box.h), bot: box.y + box.h * 1.06 });
+  const slice = (c, src, x0, x1, y0, y1, ox = 0) => {
+    if (x1 > x0 && y1 > y0) c.drawImage(src, x0, y0, x1 - x0, y1 - y0, x0 + ox, y0, x1 - x0, y1 - y0);
+  };
+
+  // Random: every letter starts the right or the wrong way up and turns over at its own moments.
+  // Two or four turns each, so the 12 s loop closes on itself and can be recorded.
+  LETTER_PLANS.random = (() => {
+    const L = 12, plans = [];
+    for (let i = 0; i < 10; i++) {
+      const n = hash(i * 7.3 + 1) > .4 ? 4 : 2, slot = L / n, ev = [];
+      for (let k = 0; k < n; k++) {
+        const d = .4 + hash(i * 3.1 + k * 5.7) * .4;
+        ev.push([k * slot + .3 + hash(i * 11.9 + k * 2.3) * (slot - d - .6), d, hash(i * 4.4 + k * 9.1) > .5 ? 1 : -1]);
+      }
+      plans.push({ init: hash(i * 2.9 + 3.3) > .5, ev });
+    }
+    return { L, init: i => plans[i].init, flips: i => plans[i].ev };
+  })();
+
+  /* ---------- wave / counter / random: a cut per letter ---------- */
+  function letterState(i, t, plan) {
+    let top = plan.init(i);
+    for (const [s0, d, dir] of plan.flips(i)) {
+      if (t < s0) break;
+      if (t < s0 + d) return { from: top, to: !top, local: t - s0, d, dir };
+      top = !top;
+    }
+    return { from: top, to: top };
+  }
+  function letters(plan, t) {
+    const { top, cut, bot } = span();
+    const c = comp.getContext("2d");
+    c.clearRect(0, 0, W, H);
+    const bands = [];
+    COLS.forEach(([x0, x1], i) => {
+      const st = letterState(i, t, plan);
+      let w = H, up = st.to, lo = st.to, kick = 0;
+      if (st.d) {
+        const q = easeInOut(clamp(Math.floor(st.local * STEP) / (st.d * STEP), 0, 1));
+        kick = Math.sin(Math.PI * q);
+        if (st.dir > 0) { w = Math.round(top + (bot - top) * q); up = st.to; lo = st.from; }
+        else { w = Math.round(bot - (bot - top) * q); up = st.from; lo = st.to; }
+        bands.push([x0, x1, w, kick]);
+      }
+      const dx = Math.round(kick * box.w * .006);
+      const rows = (bTop, y0, y1, ox) => {
+        slice(c, bTop ? offB : offA, x0, x1, y0, Math.min(y1, cut), ox);
+        slice(c, bTop ? offA : offB, x0, x1, Math.max(y0, cut), y1, ox);
+      };
+      rows(up, 0, w, -dx);
+      rows(lo, w, H, dx);
+    });
+    ctx.drawImage(comp, 0, 0);
+    const band = box.h * .14;
+    ctx.fillStyle = BG;
+    for (const [x0, x1, w, kick] of bands) {         // each travelling cut breaks into coarse blocks
+      ctx.fillRect(x0, w - band / 2, x1 - x0, band);
+      pixelate(ctx, comp, box.h * (.025 + .04 * kick), w - band / 2, w + band / 2, x0, x1);
+    }
+    return bands.length ? "turning" : "held";
+  }
+
+  /* ---------- interlace: the cut multiplies into strips ---------- */
+  function interlace(t) {
+    const { top, cut, bot } = span();
+    let acc = 0, k = 0;
+    while (k < INTERLACE.length - 1 && t >= acc + INTERLACE[k][2]) acc += INTERLACE[k++][2];
+    const [n, bTop] = INTERLACE[k], local = t - acc;
+    const sh = (bot - top) / n;
+    const settle = clamp(1 - Math.floor(local * STEP) / 3, 0, 1);   // a short jolt on every change
+    const c = comp.getContext("2d");
+    c.clearRect(0, 0, W, H);
+    for (let j = Math.floor(-cut / sh) - 1; j <= Math.ceil((H - cut) / sh); j++) {
+      const y0 = Math.round(cut + j * sh), y1 = Math.round(cut + (j + 1) * sh);
+      const odd = ((j % 2) + 2) % 2 === 1;           // j = -1 is the strip just above the cut
+      const ox = Math.round((odd ? -1 : 1) * settle * box.w * .01);
+      slice(c, odd === bTop ? offB : offA, 0, W, Math.max(0, y0), Math.min(H, y1), ox);
+    }
+    ctx.drawImage(comp, 0, 0);
+    return `${n} strips`;
+  }
+
+  /* ---------- blade: a turning cut (blackletter on one side of the line) ---------- */
+  function halfPlanes(cx, cy, phi, slide, flipped) {
+    const L = (W + H) * 2, dX = Math.cos(phi), dY = Math.sin(phi), nX = -dY, nY = dX;
+    const sideB = flipped ? 1 : -1;
+    const c = comp.getContext("2d");
+    c.clearRect(0, 0, W, H);
+    for (const [side, src, k] of [[sideB, offB, slide], [-sideB, offA, -slide]]) {
+      c.save();
+      c.beginPath();
+      c.moveTo(cx + dX * L, cy + dY * L);
+      c.lineTo(cx - dX * L, cy - dY * L);
+      c.lineTo(cx - dX * L + nX * L * side, cy - dY * L + nY * L * side);
+      c.lineTo(cx + dX * L + nX * L * side, cy + dY * L + nY * L * side);
+      c.closePath();
+      c.clip();
+      c.drawImage(src, Math.round(dX * k), Math.round(dY * k));
+      c.restore();
+    }
+    ctx.drawImage(comp, 0, 0);
+  }
+  const GAP = .415;                                  // the space between FAKE and CHURCH, across the mark
+  function blade(t) {
+    const { cut } = span();
+    const seq = [...BLADE, ...BLADE];
+    let acc = 0, turns = 0;
+    for (const [hold, spin] of seq) {
+      if (t < acc + hold) {                          // resting: a slow, slight tilt
+        const u = (t - acc) / hold;
+        halfPlanes(box.x + GAP * box.w, cut, turns * Math.PI + .07 * Math.sin(u * Math.PI * 2), 0, false);
+        return turns % 2 ? "grotesque over blackletter" : "blackletter over grotesque";
+      }
+      acc += hold;
+      if (t < acc + spin) {
+        const q = easeInOut((t - acc) / spin);
+        halfPlanes(box.x + GAP * box.w, cut, (turns + q) * Math.PI, Math.sin(Math.PI * q) * box.w * .02, false);
+        return "turning";
+      }
+      acc += spin; turns++;
+    }
+    halfPlanes(box.x + GAP * box.w, cut, 0, 0, false);
+    return "blackletter over grotesque";
+  }
+
+  /* ---------- cursor: the cut follows the pointer; click swaps the faces ---------- */
+  const pointer = { x: .5, y: .5, at: -1e9 }, cur = { y: null, a: 0 };
+  let swapped = false, swapAt = -1e9;
+  addEventListener("pointermove", e => { pointer.x = e.clientX / innerWidth; pointer.y = e.clientY / innerHeight; pointer.at = performance.now(); });
+  cv.addEventListener("pointerdown", () => { if (mode === "cursor") { swapped = !swapped; swapAt = performance.now(); } });
+  function cursor(now) {
+    const { top, cut, bot } = span();
+    const idle = now - pointer.at > 2200;
+    const ty = idle ? cut + Math.sin(now / 1400) * box.h * .16 : top + clamp(pointer.y, 0, 1) * (bot - top);
+    const ta = idle ? Math.sin(now / 2300) * .12 : (pointer.x - .5) * .7;
+    if (cur.y === null) cur.y = cut;
+    cur.y += (ty - cur.y) * .12;
+    cur.a += (ta - cur.a) * .12;
+    const jolt = clamp(1 - (now - swapAt) / 260, 0, 1);
+    halfPlanes(box.x + GAP * box.w, cur.y, cur.a, Math.sin(Math.PI * jolt) * box.w * .02, swapped);
+    return idle ? "idle · move the pointer, click to swap" : "following · click to swap";
+  }
+
   /* ---------- clock ---------- */
   let start = performance.now(), paused = false, pausedAt = 0, lastLabel = "";
   const label = document.getElementById("phase");
@@ -233,10 +427,20 @@
     const L = loopLen(mode), lt = ((t % L) + L) % L;
     ctx.fillStyle = BG; ctx.fillRect(0, 0, W, H);
 
+    let phase;
+    if (LETTER_PLANS[mode]) phase = letters(LETTER_PLANS[mode], lt);
+    else if (mode === "interlace") phase = interlace(lt);
+    else if (mode === "blade") phase = blade(lt);
+    else if (mode === "cursor") phase = cursor(now);
+    if (phase) {
+      const text = `Fake Church · ${NAMES[mode]} · ${phase}`;
+      if (text !== lastLabel) { label.textContent = text; lastLabel = text; }
+      requestAnimationFrame(frame);
+      return;
+    }
     let acc = 0, seg = timeline(mode)[0], local = 0;
     for (const f of timeline(mode)) { if (lt < acc + f.d) { seg = f; local = lt - acc; break; } acc += f.d; }
     const S = { A: offA, B: offB };
-    let phase;
     if (seg.kind === "hold") { ctx.drawImage(S[seg.show], 0, 0); phase = seg.show === "A" ? "grotesque" : "blackletter"; }
     else if (seg.kind === "go") { transition(S[seg.from], S[seg.to], local, seg.d); phase = seg.to === "B" ? "→ blackletter" : "→ grotesque"; }
     else phase = split(seg, local);
@@ -265,8 +469,9 @@
   });
   document.getElementById("clean").addEventListener("click", () => document.body.classList.add("clean"));
   addEventListener("keydown", e => {
-    const i = "1234".indexOf(e.key);
+    const i = "1234567890".indexOf(e.key);
     if (i >= 0) setMode(MODES[i]);
+    if (e.key === "r" || e.key === "R") setMode("random");
     if (e.key === "h" || e.key === "H") document.body.classList.toggle("clean");
     if (e.key === " ") { e.preventDefault(); pauseBtn.click(); }
   });
